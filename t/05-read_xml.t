@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More;
+use Test::More 0.88;
 plan tests => 43;
 use Test::NoWarnings;
 use TBX::Min;
@@ -12,7 +12,10 @@ use Path::Tiny;
 my $basic_path = path($Bin, 'corpus', 'basic.tbx');
 my $basic_txt = $basic_path->slurp;
 
+note('reading XML file');
 test_read("$basic_path");
+
+note('reading XML string');
 test_read(\$basic_txt);
 
 sub test_read {
@@ -30,7 +33,6 @@ sub test_header {
     is($min->origin, 'Klaus-Dirk Schmidt', 'correct origin');
     is($min->license, 'CC BY license can be freely copied and modified',
         'correct license');
-    is($min->subject_field, 'biology', 'correct subject field');
     is($min->directionality, 'bidirectional', 'correct directionality');
     is($min->source_lang, 'de', 'correct source language');
     is($min->target_lang, 'en', 'correct target language');
@@ -44,6 +46,8 @@ sub test_body {
     my $concept = $concepts->[0];
     isa_ok($concept, 'TBX::Min::ConceptEntry');
     is($concept->id, 'C002', 'correct concept ID');
+    is($concept->subject_field, 'biology',
+        'correct concept subject field');
     my $languages = $concept->lang_groups;
     is(scalar @$languages, 2, 'found two languages');
 

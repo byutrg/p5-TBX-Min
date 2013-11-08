@@ -6,10 +6,10 @@
         <origin>Klaus-Dirk Schmidt</origin>
         <directionality>bidirectional</directionality>
         <license>CC BY license can be freely copied and modified</license>
-        <subjectField>biology</subjectField>
     </header>
     <body>
         <conceptEntry id="C002">
+            <subjectField>biology</subjectField>
             <langGroup xml:lang="de">
                 <termGroup>
                     <term>Hund</term>
@@ -33,6 +33,7 @@
             </langGroup>
         </conceptEntry>
         <conceptEntry id="c008">
+            <subjectField>biology</subjectField>
             <langGroup xml:lang="de">
                 <termGroup>
                     <term>Katze</term>
@@ -48,6 +49,7 @@
             </langGroup>
         </conceptEntry>
         <conceptEntry id="C007">
+            <subjectField>biology</subjectField>
             <langGroup xml:lang="de">
                 <termGroup>
                     <term>Maus</term>

@@ -40,7 +40,6 @@ string pointer containing the TBX-Min XML data or the name of the file
 containing this data is required.
 
 =cut
-
 sub new_from_xml {
 	my ($class, $data) = @_;
 
@@ -55,7 +54,7 @@ sub new_from_xml {
 		TwigHandlers    => {
 			# header attributes become attributes of the TBX::Min object
 			title => \&_headerAtt,
-			subjectField => \&_headerAtt,
+			subjectField => \&_subjectField,
 			origin => \&_headerAtt,
 			license => \&_headerAtt,
 			directionality => \&_headerAtt,
@@ -90,10 +89,10 @@ sub new_from_xml {
 
 Creates a new C<TBX::Min> instance. Optionally you may pass in
 a hash reference which is used to initialize the object. The allowed hash
-fields are C<title>, C<origin>, C<license>, C<subject_field>,
-C<directionality>, C<source_lang> and C<target_lang>, which correspond to
-methods of the same name, and C<concepts>, which should be an array
-reference containing C<TBX::Min::ConceptEntry> objects.
+fields are C<title>, C<origin>, C<license>, C<directionality>, C<source_lang>
+and C<target_lang>, which correspond to methods of the same name, and
+C<concepts>, which should be an array reference containing
+C<TBX::Min::ConceptEntry> objects.
 
 =cut
 sub new {
@@ -156,19 +155,6 @@ sub license {
         return $self->{license} = $license;
     }
     return $self->{license};
-}
-
-=head2 C<subject_field>
-
-Get or set the document subject field string.
-
-=cut
-sub subject_field {
-    my ($self, $subject_field) = @_;
-    if($subject_field) {
-        return $self->{subject_field} = $subject_field;
-    }
-    return $self->{subject_field};
 }
 
 =head2 C<directionality>
@@ -284,10 +270,17 @@ sub _conceptStart {
 	return 1;
 }
 
+#just set the subject_field of the current concept
+sub _subjectField {
+	my ($twig, $node) = @_;
+    $twig->{tbx_min_concepts}->[-1]->
+        subject_field($node->text);
+}
+
 # Create a new LangGroup, add it to the current concept,
 # and set it as the current LangGroup.
 sub _langStart {
-	my ($twig, $node) = @_;
+    my ($twig, $node) = @_;
 	my $lang = TBX::Min::LangGroup->new();
 	if($node->att('xml:lang')){
 		$lang->code($node->att('xml:lang'));

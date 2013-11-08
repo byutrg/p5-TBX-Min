@@ -30,9 +30,9 @@ represent this concept in a given languages.
 
 Creates a new C<TBX::Min::ConceptEntry> instance. Optionally you may pass in
 a hash reference which is used to initialize the object. The allowed hash
-fields are C<id> and C<lang_groups>, where C<id> is the concept entry id value
-and C<langGroups> is an array reference containing C<TBX::Min::LangGroup>
-objects.
+fields are C<id>, C<subject_field> and C<lang_groups>, where C<id> and
+C<subject_field> correspond to methods of the same name, and C<langGroups> is
+an array reference containing C<TBX::Min::LangGroup> objects.
 
 =cut
 sub new {
@@ -57,6 +57,19 @@ sub id {
         return $self->{id} = $id;
     }
     return $self->{id};
+}
+
+=head2 C<subject_field>
+
+Get or set the concept subject field string.
+
+=cut
+sub subject_field {
+    my ($self, $subject_field) = @_;
+    if($subject_field) {
+        return $self->{subject_field} = $subject_field;
+    }
+    return $self->{subject_field};
 }
 
 =head2 C<lang_groups>
