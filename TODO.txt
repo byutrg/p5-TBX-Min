@@ -1,0 +1,3 @@
+TBX::Min
+
+    - check for correct hash values in the constructors of each class
