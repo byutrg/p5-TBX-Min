@@ -12,7 +12,7 @@ use FindBin qw($Bin);
 use Path::Tiny;
 
 my $args = {
-    lang => 'en',
+    code => 'en',
     term_groups => [
         TBX::Min::TermGroup->new({term => 'foo'}),
         TBX::Min::TermGroup->new({term => 'bar'}),
@@ -23,19 +23,19 @@ my $args = {
 my $lang_grp = TBX::Min::LangGroup->new;
 isa_ok($lang_grp, 'TBX::Min::LangGroup');
 
-ok(!$lang_grp->lang, 'language not defined by default');
+ok(!$lang_grp->code, 'language not defined by default');
 
 #test constructor with arguments
 $lang_grp = TBX::Min::LangGroup->new($args);
-is($lang_grp->lang, $args->{lang}, 'correct language from constructor');
+is($lang_grp->code, $args->{code}, 'correct language code from constructor');
 cmp_deeply($lang_grp->term_groups, $args->{term_groups},
     'correct term groups from constructor');
 
 #test setters
 $lang_grp = TBX::Min::LangGroup->new();
 
-$lang_grp->lang($args->{lang});
-is($lang_grp->lang, $args->{lang}, 'lang correctly set');
+$lang_grp->code($args->{code});
+is($lang_grp->code, $args->{code}, 'code correctly set');
 
 $lang_grp->add_term_group($args->{term_groups}->[0]);
 cmp_deeply($lang_grp->term_groups->[0], $args->{term_groups}->[0],

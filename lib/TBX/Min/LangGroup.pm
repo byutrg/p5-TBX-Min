@@ -9,7 +9,7 @@ use Carp;
 
     use TBX::Min::LangGroup;
     my $lang_grp = TBX::Min::LangGroup->new(
-        {lang => 'en'});
+        {code => 'en'});
     print $lang_grp->lang(); # 'en'
     my $term_grp = TBX::Min::TermGroup->new(...);
     $lang_grp->add_term_group($term_grp);
@@ -30,7 +30,7 @@ groups each representing a given concept for the same language.
 
 Creates a new C<TBX::Min::LangGroup> instance. Optionally you may pass in
 a hash reference which is used to initialize the object. The allowed hash
-fields are C<lang> and C<term_groups>, where C<lang> is the abbreviation of
+fields are C<code> and C<term_groups>, where C<code> is the abbreviation of
 the language the contained terms belong to, and C<term_groups> is an array
 reference containing C<TBX::Min::LangGroup> objects.
 
@@ -46,17 +46,17 @@ sub new {
     return bless $self, $class;
 }
 
-=head2 C<lang>
+=head2 C<code>
 
 Get or set the language group language abbreviation (C<en>, C<de>, etc.).
 
 =cut
-sub lang {
-    my ($self, $lang) = @_;
-    if($lang) {
-        return $self->{lang} = $lang;
+sub code {
+    my ($self, $code) = @_;
+    if($code) {
+        return $self->{code} = $code;
     }
-    return $self->{lang};
+    return $self->{code};
 }
 
 =head2 C<term_groups>

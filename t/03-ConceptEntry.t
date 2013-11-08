@@ -14,8 +14,8 @@ use Path::Tiny;
 my $args = {
     lang => 'en',
     lang_groups => [
-        TBX::Min::LangGroup->new({lang => 'en'}),
-        TBX::Min::LangGroup->new({lang => 'zh'}),
+        TBX::Min::LangGroup->new({code => 'en'}),
+        TBX::Min::LangGroup->new({code => 'zh'}),
     ],
 };
 
