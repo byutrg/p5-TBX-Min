@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding="UTF-8"?>
-<TBX dialect="NoNameYet-V0.7" xml:lang="en">
+<TBX dialect="TBX-Min" xml:lang="en">
     <header>
         <languages source="de" target="en"/>
         <title>TBX sample</title>
