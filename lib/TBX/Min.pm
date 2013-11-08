@@ -53,6 +53,7 @@ sub new_from_xml {
 		# do_not_chain_handlers => 1, #can be important when things get complicated
 		keep_spaces		=> 0,
 		TwigHandlers    => {
+            TBX => \&_tbx,
 			# header attributes become attributes of the TBX::Min object
 			title => \&_headerAtt,
 			subjectField => \&_subjectField,
@@ -198,6 +199,21 @@ sub target_lang {
     return $self->{target_lang};
 }
 
+=head2 C<doc_lang>
+
+Get or set the language used in the document outside of C<LangGroup>
+contents (such as in the title or origin strings.) This should be an
+abbreviation such as "en".
+
+=cut
+sub doc_lang {
+    my ($self, $doc_lang) = @_;
+    if($doc_lang) {
+        return $self->{doc_lang} = $doc_lang;
+    }
+    return $self->{doc_lang};
+}
+
 =head2 C<concepts>
 
 Returns an array ref containing the C<TBX::Min::ConceptEntry> objects contained
@@ -240,7 +256,8 @@ sub as_xml {
     my $xml;
     my $writer = XML::Writer->new(
         OUTPUT => \$xml, NEWLINES => 1, ENCODING => 'utf-8');
-    $writer->startTag('TBX', dialect => 'TBX-Min');
+    $writer->startTag('TBX', dialect => 'TBX-Min',
+        $self->doc_lang ? ('xml:lang' => $self->doc_lang) : ());
 
     $writer->startTag('header');
     for my $header_att (qw(title origin license directionality)){
@@ -322,6 +339,15 @@ sub as_xml {
 ######################
 # all of the twig handlers store state on the XML::Twig object. A bit kludgy,
 # but it works.
+
+sub _tbx {
+    my ($twig, $_) = @_;
+    if(my $lang = $_->att('xml:lang')){
+        $twig->{tbx_min_att}->{doc_lang} = $lang;
+    }
+    return 1;
+}
+
 sub _headerAtt{
 	my ($twig, $_) = @_;
 	${ $twig->{'tbx_min_att'} }{_decamel($_->name)} = $_->text;

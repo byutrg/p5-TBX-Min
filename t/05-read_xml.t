@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-plan tests => 43;
+plan tests => 45;
 use Test::NoWarnings;
 use TBX::Min;
 use FindBin qw($Bin);
@@ -23,6 +23,7 @@ sub test_read {
     my $min = TBX::Min->new_from_xml($input);
 
     isa_ok($min, 'TBX::Min');
+    is($min->doc_lang, 'en', 'correct document language');
     test_header($min);
     test_body($min);
 }

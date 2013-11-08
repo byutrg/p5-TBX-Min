@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 24;
+plan tests => 27;
 use Test::NoWarnings;
 use Test::Deep;
 use_ok('TBX::Min');
@@ -12,6 +12,7 @@ use FindBin qw($Bin);
 use Path::Tiny;
 
 my $args = {
+    doc_lang => 'foo0',
     title => 'foo1',
     origin => 'foo2',
     license => 'foo3',
@@ -29,6 +30,7 @@ my $args = {
 my $min = TBX::Min->new();
 isa_ok($min, 'TBX::Min');
 
+ok(!$min->doc_lang, 'doc_lang not defined by default');
 ok(!$min->title, 'title not defined by default');
 ok(!$min->origin, 'origin not defined by default');
 ok(!$min->license, 'license not defined by default');
@@ -39,6 +41,7 @@ ok(!$min->concepts, 'concepts not defined by default');
 
 #test constructor with arguments
 $min = TBX::Min->new($args);
+is($min->doc_lang, $args->{doc_lang}, 'correct doc_lang from constructor');
 is($min->title, $args->{title}, 'correct title from constructor');
 is($min->origin, $args->{origin}, 'correct origin from constructor');
 is($min->license, $args->{license}, 'correct license from constructor');
@@ -52,6 +55,9 @@ cmp_deeply($min->concepts, $args->{concepts}, 'correct concepts from constructor
 
 #test setters
 $min = TBX::Min->new();
+
+$min->doc_lang($args->{doc_lang});
+is($min->doc_lang, $args->{doc_lang}, 'doc_lang correctly set');
 
 $min->title($args->{title});
 is($min->title, $args->{title}, 'title correctly set');
