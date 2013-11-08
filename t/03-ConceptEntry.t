@@ -12,7 +12,7 @@ use FindBin qw($Bin);
 use Path::Tiny;
 
 my $args = {
-    lang => 'en',
+    id => 'B001',
     lang_groups => [
         TBX::Min::LangGroup->new({code => 'en'}),
         TBX::Min::LangGroup->new({code => 'zh'}),
