@@ -1,25 +1,23 @@
-#basic test file
+# check that a TBX::Min object can be created from a TBX-Min XML file.
 
 use strict;
 use warnings;
 use Test::More;
-plan tests => 22;
+plan tests => 43;
 use Test::NoWarnings;
 use TBX::Min;
 use FindBin qw($Bin);
 use Path::Tiny;
-use Data::Dumper;
 
-my $corpus_dir = path($Bin, 'corpus');
-my $basic_path = path($corpus_dir, 'basic.tbx');
+my $basic_path = path($Bin, 'corpus', 'basic.tbx');
+my $basic_txt = $basic_path->slurp;
+
 test_read("$basic_path");
-# my $basic_txt = $basic_path->slurp;
-# test_read(\$basic_txt);
-
+test_read(\$basic_txt);
 
 sub test_read {
     my ($input) = @_;
-    my $min = TBX::Min->new(file => $input);
+    my $min = TBX::Min->new($input);
 
     isa_ok($min, 'TBX::Min');
     test_header($min);
@@ -44,20 +42,20 @@ sub test_body {
     is(scalar @$concepts, 3, 'found three concepts');
 
     my $concept = $concepts->[0];
-    isa_ok($concept, 'TBX::Min::Concept');
+    isa_ok($concept, 'TBX::Min::ConceptEntry');
     is($concept->id, 'C002', 'correct concept ID');
-    my $languages = $concept->languages;
+    my $languages = $concept->lang_groups;
     is(scalar @$languages, 2, 'found two languages');
 
     my $language = $languages->[1];
-    isa_ok($language, 'TBX::Min::Concept::Language');
+    isa_ok($language, 'TBX::Min::LangGroup');
     is($language->code, 'en', 'language is English');
-    my $terms = $language->terms;
+    my $terms = $language->term_groups;
     is(scalar @$terms, 2, 'found two terms');
 
     my $term = $terms->[1];
-    isa_ok($term, 'TBX::Min::Concept::Language::Term');
-    is($term->text, 'hound', 'correct term text');
+    isa_ok($term, 'TBX::Min::TermGroup');
+    is($term->term, 'hound', 'correct term text');
     is($term->part_of_speech, 'noun', 'correct part of speech');
     is($term->status, 'deprecated', 'correct status');
     is($term->customer, 'SAP', 'correct customer');
