@@ -33,7 +33,7 @@ data.
 
 =head1 METHODS
 
-=head2 C<new>
+=head2 C<new_from_xml>
 
 Creates a new instance of TBX::Min. The single argument should be either a
 string pointer containing the TBX-Min XML data or the name of the file
@@ -41,7 +41,7 @@ containing this data is required.
 
 =cut
 
-sub new {
+sub new_from_xml {
 	my ($class, $data) = @_;
 
 	my $fh = _get_handle($data);
@@ -84,6 +84,27 @@ sub new {
 	$self->{concepts} = $twig->{tbx_min_concepts};
 	bless $self, $class;
 	return $self;
+}
+
+=head2 C<new>
+
+Creates a new C<TBX::Min> instance. Optionally you may pass in
+a hash reference which is used to initialize the object. The allowed hash
+fields are C<title>, C<origin>, C<license>, C<subject_field>,
+C<directionality>, C<source_lang> and C<target_lang>, which correspond to
+methods of the same name, and C<concepts>, which should be an array
+reference containing C<TBX::Min::ConceptEntry> objects.
+
+=cut
+sub new {
+    my ($class, $args) = @_;
+    my $self;
+    if((ref $args) eq 'HASH'){
+        $self = $args;
+    }else{
+        $self = {};
+    }
+    return bless $self, $class;
 }
 
 sub _get_handle {
@@ -205,6 +226,22 @@ sub concepts {
     }
     return $self->{concepts};
 }
+
+=head2 C<add_concept>
+
+Adds the input C<TBX::Min::LangGroup> object to the list of language groups
+contained by this object.
+
+=cut
+sub add_concept {
+    my ($self, $concept) = @_;
+    if( !$concept || !$concept->isa('TBX::Min::ConceptEntry') ){
+        croak 'argument to add_concept should be a TBx::Min::ConceptEntry';
+    }
+    push @{$self->{concepts}}, $concept;
+    return;
+}
+
 ######################
 ### XML TWIG HANDLERS
 ######################

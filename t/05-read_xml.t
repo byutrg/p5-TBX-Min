@@ -17,7 +17,7 @@ test_read(\$basic_txt);
 
 sub test_read {
     my ($input) = @_;
-    my $min = TBX::Min->new($input);
+    my $min = TBX::Min->new_from_xml($input);
 
     isa_ok($min, 'TBX::Min');
     test_header($min);
