@@ -8,10 +8,11 @@ use Carp;
 =head1 SYNOPSIS
 
     use TBX::Min::ConceptEntry;
+    use TBX::Min::LangGroup;
     my $concept = TBX::Min::ConceptEntry->new(
         {id => 'B001'});
     print $concept->id(); # 'B001'
-    my $lang_grp = TBX::Min::LangGroup->new(...);
+    my $lang_grp = TBX::Min::LangGroup->new({code => 'en'});
     $concept->add_lang_group($lang_grp);
     my $lang_grps = $concept->lang_groups;
     print $#$lang_grps; # '1'
@@ -80,7 +81,7 @@ internally, so additions or removals from the array will be reflected in future
 calls to this method.
 
 =cut
-sub lang_groups {
+sub lang_groups { ## no critic(RequireArgUnpacking)
     my ($self) = @_;
     if (@_ > 1){
         croak 'extra argument found (lang_groups is a getter only)';

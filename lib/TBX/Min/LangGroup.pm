@@ -8,10 +8,11 @@ use Carp;
 =head1 SYNOPSIS
 
     use TBX::Min::LangGroup;
+    use TBX::Min::TermGroup;
     my $lang_grp = TBX::Min::LangGroup->new(
         {code => 'en'});
     print $lang_grp->lang(); # 'en'
-    my $term_grp = TBX::Min::TermGroup->new(...);
+    my $term_grp = TBX::Min::TermGroup->new({term => 'perl'});
     $lang_grp->add_term_group($term_grp);
     my $term_grps = $lang_grp->term_groups;
     print $#$term_grps; # '1'
@@ -67,7 +68,7 @@ internally, so additions or removals from the array will be reflected in future
 calls to this method.
 
 =cut
-sub term_groups {
+sub term_groups { ## no critic(RequireArgUnpacking)
     my ($self) = @_;
     if (@_ > 1){
         croak 'extra argument found (term_groups is a getter only)';

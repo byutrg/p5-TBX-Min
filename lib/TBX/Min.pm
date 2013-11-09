@@ -47,7 +47,7 @@ sub new_from_xml {
 	my $fh = _get_handle($data);
 
 	# build a twig out of the input document
-	my $twig = new XML::Twig(
+	my $twig = XML::Twig->new(
 		# pretty_print    => 'nice', #this seems to affect other created twigs, too
 		# output_encoding => 'UTF-8',
 		# do_not_chain_handlers => 1, #can be important when things get complicated
@@ -87,6 +87,17 @@ sub new_from_xml {
 	return $self;
 }
 
+sub _get_handle {
+    my ($data) = @_;
+    my $fh;
+    if((ref $data) eq 'SCALAR'){
+        open $fh, '<', $data; ## no critic(RequireBriefOpen)
+    }else{
+        $fh = path($data)->filehandle('<');
+    }
+    return $fh;
+}
+
 =head2 C<new>
 
 Creates a new C<TBX::Min> instance. Optionally you may pass in
@@ -106,17 +117,6 @@ sub new {
         $self = {};
     }
     return bless $self, $class;
-}
-
-sub _get_handle {
-	my ($data) = @_;
-	my $fh;
-	if((ref $data) eq 'SCALAR'){
-		open $fh, '<', $data;
-	}else{
-		$fh = path($data)->filehandle('<');
-	}
-	return $fh;
 }
 
 =head2 C<title>
@@ -222,7 +222,7 @@ internally, so additions or removals from the array will be reflected in future
 calls to this method.
 
 =cut
-sub concepts {
+sub concepts { ## no critic(RequireArgUnpacking)
     my ($self) = @_;
     if (@_ > 1){
         croak 'extra argument found (concepts is a getter only)';
@@ -390,6 +390,7 @@ sub _subjectField {
 	my ($twig, $node) = @_;
     $twig->{tbx_min_concepts}->[-1]->
         subject_field($node->text);
+    return 1;
 }
 
 # Create a new LangGroup, add it to the current concept,
@@ -411,7 +412,7 @@ sub _langStart {
 # Create a new termGroup, add it to the current langGroup,
 # and set it as the current termGroup.
 sub _termGrpStart {
-	my ($twig, $node) = @_;
+	my ($twig) = @_;
 	my $term = TBX::Min::TermGroup->new();
 	$twig->{tbx_min_current_lang_grp}->add_term_group($term);
 	$twig->{tbx_min_current_term_grp} = $term;
