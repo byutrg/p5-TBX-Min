@@ -30,7 +30,7 @@ sub test_read {
 
 sub test_header {
     my ($min) = @_;
-    is($min->title, 'TBX sample', 'correct title');
+    is($min->id, 'TBX sample', 'correct id');
     is($min->creator, 'Klaus-Dirk Schmidt', 'correct creator');
     is($min->license, 'CC BY license can be freely copied and modified',
         'correct license');

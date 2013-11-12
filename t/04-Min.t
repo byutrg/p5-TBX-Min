@@ -13,7 +13,7 @@ use Path::Tiny;
 
 my $args = {
     doc_lang => 'foo0',
-    title => 'foo1',
+    id => 'foo1',
     creator => 'foo2',
     license => 'foo3',
     directionality => 'foo5',
@@ -31,7 +31,7 @@ my $min = TBX::Min->new();
 isa_ok($min, 'TBX::Min');
 
 ok(!$min->doc_lang, 'doc_lang not defined by default');
-ok(!$min->title, 'title not defined by default');
+ok(!$min->id, 'id not defined by default');
 ok(!$min->creator, 'creator not defined by default');
 ok(!$min->license, 'license not defined by default');
 ok(!$min->directionality, 'directionality not defined by default');
@@ -42,7 +42,7 @@ ok(!$min->concepts, 'concepts not defined by default');
 #test constructor with arguments
 $min = TBX::Min->new($args);
 is($min->doc_lang, $args->{doc_lang}, 'correct doc_lang from constructor');
-is($min->title, $args->{title}, 'correct title from constructor');
+is($min->id, $args->{id}, 'correct id from constructor');
 is($min->creator, $args->{creator}, 'correct creator from constructor');
 is($min->license, $args->{license}, 'correct license from constructor');
 is($min->directionality, $args->{directionality},
@@ -59,8 +59,8 @@ $min = TBX::Min->new();
 $min->doc_lang($args->{doc_lang});
 is($min->doc_lang, $args->{doc_lang}, 'doc_lang correctly set');
 
-$min->title($args->{title});
-is($min->title, $args->{title}, 'title correctly set');
+$min->id($args->{id});
+is($min->id, $args->{id}, 'id correctly set');
 
 $min->creator($args->{creator});
 is($min->creator, $args->{creator}, 'creator correctly set');

@@ -55,7 +55,7 @@ sub new_from_xml {
 		TwigHandlers    => {
             TBX => \&_tbx,
 			# header attributes become attributes of the TBX::Min object
-			title => \&_headerAtt,
+			id => \&_headerAtt,
 			subjectField => \&_subjectField,
 			creator => \&_headerAtt,
 			license => \&_headerAtt,
@@ -102,7 +102,7 @@ sub _get_handle {
 
 Creates a new C<TBX::Min> instance. Optionally you may pass in
 a hash reference which is used to initialize the object. The allowed hash
-fields are C<title>, C<creator>, C<license>, C<directionality>, C<source_lang>
+fields are C<id>, C<creator>, C<license>, C<directionality>, C<source_lang>
 and C<target_lang>, which correspond to methods of the same name, and
 C<concepts>, which should be an array reference containing
 C<TBX::Min::ConceptEntry> objects.
@@ -119,17 +119,18 @@ sub new {
     return bless $self, $class;
 }
 
-=head2 C<title>
+=head2 C<id>
 
-Get or set the document title.
+Get or set the document id. This should be a unique string
+identifying this glossary.
 
 =cut
-sub title {
-    my ($self, $title) = @_;
-    if($title) {
-        return $self->{title} = $title;
+sub id {
+    my ($self, $id) = @_;
+    if($id) {
+        return $self->{id} = $id;
     }
-    return $self->{title};
+    return $self->{id};
 }
 
 =head2 C<creator>
@@ -201,8 +202,7 @@ sub target_lang {
 =head2 C<doc_lang>
 
 Get or set the language used in the document outside of C<LangGroup>
-contents (such as in the title string.) This should be an
-abbreviation such as "en".
+contents. This should be an abbreviation such as "en".
 
 =cut
 sub doc_lang {
@@ -259,7 +259,7 @@ sub as_xml {
         $self->doc_lang ? ('xml:lang' => $self->doc_lang) : ());
 
     $writer->startTag('header');
-    for my $header_att (qw(title creator license directionality)){
+    for my $header_att (qw(id creator license directionality)){
         next unless $self->{$header_att};
         $writer->startTag($header_att);
         $writer->characters($self->{$header_att});
