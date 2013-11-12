@@ -6,6 +6,7 @@ Revision history for TBX-Min
         renamed "origin" to "creator"
         renamed "title" to "id"
         added "description" field to header
+        added "dateCreated" field to header
         removed "doc_lang"
 
 0.01      2013-11-08 21:18:18 America/Los_Angeles

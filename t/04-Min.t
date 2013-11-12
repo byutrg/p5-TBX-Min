@@ -3,8 +3,9 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 27;
+plan tests => 31;
 use Test::NoWarnings;
+use Test::Exception;
 use Test::Deep;
 use_ok('TBX::Min');
 use TBX::Min::ConceptEntry;
@@ -14,6 +15,7 @@ use Path::Tiny;
 my $args = {
     id => 'foo1',
     description => 'foo8',
+    date_created => '2013-11-12T00:00:00',
     creator => 'foo2',
     license => 'foo3',
     directionality => 'foo5',
@@ -25,13 +27,13 @@ my $args = {
     ],
 };
 
-
 #test constructor without arguments
 my $min = TBX::Min->new();
 isa_ok($min, 'TBX::Min');
 
 ok(!$min->id, 'id not defined by default');
 ok(!$min->description, 'description not defined by default');
+ok(!$min->date_created, 'date_created not defined by default');
 ok(!$min->creator, 'creator not defined by default');
 ok(!$min->license, 'license not defined by default');
 ok(!$min->directionality, 'directionality not defined by default');
@@ -44,6 +46,8 @@ $min = TBX::Min->new($args);
 is($min->id, $args->{id}, 'correct id from constructor');
 is($min->description, $args->{description},
     'correct description from constructor');
+is($min->date_created, $args->{date_created},
+    'correct date_created from constructor');
 is($min->creator, $args->{creator}, 'correct creator from constructor');
 is($min->license, $args->{license}, 'correct license from constructor');
 is($min->directionality, $args->{directionality},
@@ -63,6 +67,9 @@ is($min->id, $args->{id}, 'id correctly set');
 $min->description($args->{description});
 is($min->description, $args->{description}, 'description correctly set');
 
+$min->date_created($args->{date_created});
+is($min->date_created, $args->{date_created}, 'date_created correctly set');
+
 $min->creator($args->{creator});
 is($min->creator, $args->{creator}, 'creator correctly set');
 
@@ -81,3 +88,8 @@ is($min->target_lang, $args->{target_lang}, 'target_lang correctly set');
 $min->add_concept($args->{concepts}->[0]);
 cmp_deeply($min->concepts->[0], $args->{concepts}->[0],
     'add_concepts works correctly');
+
+# check errors
+throws_ok {TBX::Min->new({date_created => 'stuff'})}
+    qr/date is not in ISO8601 format/,
+    'exception thrown for bad date';
