@@ -3,7 +3,7 @@
     <header>
         <languages source="de" target="en"/>
         <title>TBX sample</title>
-        <origin>Klaus-Dirk Schmidt</origin>
+        <creator>Klaus-Dirk Schmidt</creator>
         <directionality>bidirectional</directionality>
         <license>CC BY license can be freely copied and modified</license>
     </header>

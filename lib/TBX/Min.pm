@@ -57,7 +57,7 @@ sub new_from_xml {
 			# header attributes become attributes of the TBX::Min object
 			title => \&_headerAtt,
 			subjectField => \&_subjectField,
-			origin => \&_headerAtt,
+			creator => \&_headerAtt,
 			license => \&_headerAtt,
 			directionality => \&_headerAtt,
 			languages => \&_languages,
@@ -102,7 +102,7 @@ sub _get_handle {
 
 Creates a new C<TBX::Min> instance. Optionally you may pass in
 a hash reference which is used to initialize the object. The allowed hash
-fields are C<title>, C<origin>, C<license>, C<directionality>, C<source_lang>
+fields are C<title>, C<creator>, C<license>, C<directionality>, C<source_lang>
 and C<target_lang>, which correspond to methods of the same name, and
 C<concepts>, which should be an array reference containing
 C<TBX::Min::ConceptEntry> objects.
@@ -132,18 +132,17 @@ sub title {
     return $self->{title};
 }
 
-=head2 C<origin>
+=head2 C<creator>
 
-Get or set the document origin string (a note about or the title of the
-document's origin).
+Get or set the name of the document creator.
 
 =cut
-sub origin {
-    my ($self, $origin) = @_;
-    if($origin) {
-        return $self->{origin} = $origin;
+sub creator {
+    my ($self, $creator) = @_;
+    if($creator) {
+        return $self->{creator} = $creator;
     }
-    return $self->{origin};
+    return $self->{creator};
 }
 
 =head2 C<license>
@@ -202,7 +201,7 @@ sub target_lang {
 =head2 C<doc_lang>
 
 Get or set the language used in the document outside of C<LangGroup>
-contents (such as in the title or origin strings.) This should be an
+contents (such as in the title string.) This should be an
 abbreviation such as "en".
 
 =cut
@@ -260,7 +259,7 @@ sub as_xml {
         $self->doc_lang ? ('xml:lang' => $self->doc_lang) : ());
 
     $writer->startTag('header');
-    for my $header_att (qw(title origin license directionality)){
+    for my $header_att (qw(title creator license directionality)){
         next unless $self->{$header_att};
         $writer->startTag($header_att);
         $writer->characters($self->{$header_att});

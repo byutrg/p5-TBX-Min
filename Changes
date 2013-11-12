@@ -1,6 +1,8 @@
 Revision history for TBX-Min
 
 {{$NEXT}}
+    Changes to the TBX-Min dialect:
+        renamed "origin" to "creator"
 
 0.01      2013-11-08 21:18:18 America/Los_Angeles
 	initial release
