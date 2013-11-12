@@ -232,7 +232,8 @@ sub directionality {
 
 =head2 C<source_lang>
 
-Get or set the document source language (abbreviation) string.
+Get or set the code representing the document source language. This should
+be ISO 639 and 3166 (e.g. C<en-US>, C<de>, etc.).
 
 =cut
 sub source_lang {
@@ -245,7 +246,8 @@ sub source_lang {
 
 =head2 C<target_lang>
 
-Get or set the document target language (abbreviation) string.
+Get or set the code representing the document target language. This should
+be ISO 639 and 3166 (e.g. C<en-US>, C<de>, etc.).
 
 =cut
 sub target_lang {
