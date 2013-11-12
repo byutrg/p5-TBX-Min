@@ -53,9 +53,9 @@ sub new_from_xml {
 		# do_not_chain_handlers => 1, #can be important when things get complicated
 		keep_spaces		=> 0,
 		TwigHandlers    => {
-            TBX => \&_tbx,
 			# header attributes become attributes of the TBX::Min object
-			id => \&_headerAtt,
+            id => \&_headerAtt,
+			description => \&_headerAtt,
 			subjectField => \&_subjectField,
 			creator => \&_headerAtt,
 			license => \&_headerAtt,
@@ -133,6 +133,19 @@ sub id {
     return $self->{id};
 }
 
+=head2 C<description>
+
+Get or set the document description.
+
+=cut
+sub description {
+    my ($self, $description) = @_;
+    if($description) {
+        return $self->{description} = $description;
+    }
+    return $self->{description};
+}
+
 =head2 C<creator>
 
 Get or set the name of the document creator.
@@ -199,20 +212,6 @@ sub target_lang {
     return $self->{target_lang};
 }
 
-=head2 C<doc_lang>
-
-Get or set the language used in the document outside of C<LangGroup>
-contents. This should be an abbreviation such as "en".
-
-=cut
-sub doc_lang {
-    my ($self, $doc_lang) = @_;
-    if($doc_lang) {
-        return $self->{doc_lang} = $doc_lang;
-    }
-    return $self->{doc_lang};
-}
-
 =head2 C<concepts>
 
 Returns an array ref containing the C<TBX::Min::ConceptEntry> objects contained
@@ -255,11 +254,10 @@ sub as_xml {
     my $xml;
     my $writer = XML::Writer->new(
         OUTPUT => \$xml, NEWLINES => 1, ENCODING => 'utf-8');
-    $writer->startTag('TBX', dialect => 'TBX-Min',
-        $self->doc_lang ? ('xml:lang' => $self->doc_lang) : ());
+    $writer->startTag('TBX', dialect => 'TBX-Min');
 
     $writer->startTag('header');
-    for my $header_att (qw(id creator license directionality)){
+    for my $header_att (qw(id creator license directionality description)){
         next unless $self->{$header_att};
         $writer->startTag($header_att);
         $writer->characters($self->{$header_att});
@@ -338,14 +336,6 @@ sub as_xml {
 ######################
 # all of the twig handlers store state on the XML::Twig object. A bit kludgy,
 # but it works.
-
-sub _tbx {
-    my ($twig, $_) = @_;
-    if(my $lang = $_->att('xml:lang')){
-        $twig->{tbx_min_att}->{doc_lang} = $lang;
-    }
-    return 1;
-}
 
 sub _headerAtt{
 	my ($twig, $_) = @_;

@@ -1,9 +1,12 @@
 Revision history for TBX-Min
 
 {{$NEXT}}
-    Changes to the TBX-Min dialect:
+    Several changes were made to the TBX-Min dialect to ensure compatibility
+    with UTX:
         renamed "origin" to "creator"
         renamed "title" to "id"
+        added "description" field to header
+        removed "doc_lang"
 
 0.01      2013-11-08 21:18:18 America/Los_Angeles
 	initial release

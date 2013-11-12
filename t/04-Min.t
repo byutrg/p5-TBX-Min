@@ -12,8 +12,8 @@ use FindBin qw($Bin);
 use Path::Tiny;
 
 my $args = {
-    doc_lang => 'foo0',
     id => 'foo1',
+    description => 'foo8',
     creator => 'foo2',
     license => 'foo3',
     directionality => 'foo5',
@@ -30,8 +30,8 @@ my $args = {
 my $min = TBX::Min->new();
 isa_ok($min, 'TBX::Min');
 
-ok(!$min->doc_lang, 'doc_lang not defined by default');
 ok(!$min->id, 'id not defined by default');
+ok(!$min->description, 'description not defined by default');
 ok(!$min->creator, 'creator not defined by default');
 ok(!$min->license, 'license not defined by default');
 ok(!$min->directionality, 'directionality not defined by default');
@@ -41,8 +41,9 @@ ok(!$min->concepts, 'concepts not defined by default');
 
 #test constructor with arguments
 $min = TBX::Min->new($args);
-is($min->doc_lang, $args->{doc_lang}, 'correct doc_lang from constructor');
 is($min->id, $args->{id}, 'correct id from constructor');
+is($min->description, $args->{description},
+    'correct description from constructor');
 is($min->creator, $args->{creator}, 'correct creator from constructor');
 is($min->license, $args->{license}, 'correct license from constructor');
 is($min->directionality, $args->{directionality},
@@ -56,11 +57,11 @@ cmp_deeply($min->concepts, $args->{concepts}, 'correct concepts from constructor
 #test setters
 $min = TBX::Min->new();
 
-$min->doc_lang($args->{doc_lang});
-is($min->doc_lang, $args->{doc_lang}, 'doc_lang correctly set');
-
 $min->id($args->{id});
 is($min->id, $args->{id}, 'id correctly set');
+
+$min->description($args->{description});
+is($min->description, $args->{description}, 'description correctly set');
 
 $min->creator($args->{creator});
 is($min->creator, $args->{creator}, 'creator correctly set');
