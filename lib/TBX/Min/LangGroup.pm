@@ -44,6 +44,7 @@ sub new {
     }else{
         $self = {};
     }
+    $self->{term_groups} ||= [];
     return bless $self, $class;
 }
 

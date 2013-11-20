@@ -44,6 +44,7 @@ sub new {
     }else{
         $self = {};
     }
+    $self->{lang_groups} ||= [];
     return bless $self, $class;
 }
 

@@ -91,7 +91,7 @@ sub new_from_xml {
 	# use handlers to process individual tags, then grab the result
 	$twig->parse($fh);
 	my $self = $twig->{tbx_min_att};
-	$self->{concepts} = $twig->{tbx_min_concepts};
+	$self->{concepts} = $twig->{tbx_min_concepts} || [];
 	bless $self, $class;
 	return $self;
 }
@@ -130,6 +130,7 @@ sub new {
     }else{
         $self = {};
     }
+    $self->{concepts} ||= [];
     return bless $self, $class;
 }
 
