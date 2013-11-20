@@ -399,6 +399,7 @@ sub _date_created {
     my ($twig, $node) = @_;
     $twig->{tbx_min_att}->{date_created} =
         _parse_datetime($node->text);
+    return;
 }
 
 # turn camelCase into camel_case
