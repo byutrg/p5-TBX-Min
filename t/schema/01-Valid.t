@@ -1,15 +1,15 @@
-# Test correct TBX-Min examples against the RNG schema
+# Test correct TBX-Min examples against the RNG and XSD schemas
 use strict;
 use warnings;
-use t::RNG::TestRNG;
-plan tests => 1*blocks();
-
-filters {
-  input => 'validate',
-};
+use t::Schema::TestSchema;
+plan tests => 2*blocks();
 
 for my $block(blocks()){
-    is($block->input, undef, $block->name);
+    my $errors = rng_validate($block->input);
+    is($errors, undef, 'RNG: ' . $block->name);
+
+    $errors = xsd_validate($block->input);
+    is($errors, undef, 'XSD: ' . $block->name);
 }
 
 __DATA__

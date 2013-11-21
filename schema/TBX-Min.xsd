@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:element name="TBX">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="header"/>
+        <xs:element ref="body"/>
+      </xs:sequence>
+      <xs:attribute name="dialect" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="TBX-Min"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="header">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="id"/>
+        <xs:element ref="languages"/>
+        <xs:element minOccurs="0" ref="dateCreated"/>
+        <xs:element minOccurs="0" ref="creator"/>
+        <xs:element minOccurs="0" ref="license"/>
+        <xs:element minOccurs="0" ref="description"/>
+        <xs:element minOccurs="0" ref="directionality"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="id" type="xs:string"/>
+  <xs:element name="languages">
+    <xs:complexType>
+      <xs:attribute name="source" use="required"/>
+      <xs:attribute name="target" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dateCreated" type="xs:dateTime"/>
+  <xs:element name="creator" type="xs:string"/>
+  <xs:element name="license" type="xs:string"/>
+  <xs:element name="description" type="xs:string"/>
+  <xs:element name="directionality">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="bidirectional"/>
+        <xs:enumeration value="monodirectional"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="body">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="conceptEntry"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="conceptEntry">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="subjectField"/>
+        <xs:element ref="langGroup"/>
+      </xs:choice>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="subjectField" type="xs:string"/>
+  <xs:element name="langGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="termGroup"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:lang" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="termGroup">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="term"/>
+        <xs:element minOccurs="0" ref="note"/>
+        <xs:element minOccurs="0" ref="termStatus"/>
+        <xs:element minOccurs="0" ref="customer"/>
+        <xs:element minOccurs="0" ref="partOfSpeech"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="term" type="xs:string"/>
+  <xs:element name="note" type="xs:string"/>
+  <xs:element name="termStatus">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="provisional"/>
+        <xs:enumeration value="approved"/>
+        <xs:enumeration value="non-standard"/>
+        <xs:enumeration value="forbidden"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="customer" type="xs:string"/>
+  <xs:element name="partOfSpeech">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="noun"/>
+        <xs:enumeration value="properNoun"/>
+        <xs:enumeration value="verb"/>
+        <xs:enumeration value="adjective"/>
+        <xs:enumeration value="adverb"/>
+        <xs:enumeration value="sentence"/>
+        <xs:enumeration value="other"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+</xs:schema>
