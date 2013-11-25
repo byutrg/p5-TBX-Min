@@ -105,10 +105,10 @@
             <optional>
                <element name="termStatus">
                   <choice>
-                     <value>provisional</value>
-                     <value>approved</value>
-                     <value>non-standard</value>
-                     <value>forbidden</value>
+                     <value>admitted</value>
+                     <value>preferred</value>
+                     <value>notRecommended</value>
+                     <value>obsolete</value>
                   </choice>
                </element>
             </optional>
@@ -125,7 +125,6 @@
                      <value>verb</value>
                      <value>adjective</value>
                      <value>adverb</value>
-                     <value>sentence</value>
                      <value>other</value>
                   </choice>
                </element>

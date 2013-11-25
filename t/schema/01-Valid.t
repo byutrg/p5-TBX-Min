@@ -204,7 +204,7 @@ __DATA__
                 <termGroup>
                     <term>dog</term>
                     <note>cute!</note>
-                    <termStatus>approved</termStatus>
+                    <termStatus>preferred</termStatus>
                     <customer>SAP</customer>
                     <partOfSpeech>noun</partOfSpeech>
                 </termGroup>
@@ -228,7 +228,7 @@ __DATA__
                     <partOfSpeech>noun</partOfSpeech>
                     <customer>SAP</customer>
                     <note>cute!</note>
-                    <termStatus>approved</termStatus>
+                    <termStatus>preferred</termStatus>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
@@ -269,10 +269,6 @@ __DATA__
                 </termGroup>
                 <termGroup>
                     <term>dog</term>
-                    <partOfSpeech>sentence</partOfSpeech>
-                </termGroup>
-                <termGroup>
-                    <term>dog</term>
                     <partOfSpeech>other</partOfSpeech>
                 </termGroup>
             </langGroup>
@@ -293,19 +289,19 @@ __DATA__
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
-                    <termStatus>approved</termStatus>
+                    <termStatus>preferred</termStatus>
                 </termGroup>
                 <termGroup>
                     <term>dog</term>
-                    <termStatus>provisional</termStatus>
+                    <termStatus>admitted</termStatus>
                 </termGroup>
                 <termGroup>
                     <term>dog</term>
-                    <termStatus>non-standard</termStatus>
+                    <termStatus>notRecommended</termStatus>
                 </termGroup>
                 <termGroup>
                     <term>dog</term>
-                    <termStatus>forbidden</termStatus>
+                    <termStatus>obsolete</termStatus>
                 </termGroup>
             </langGroup>
         </conceptEntry>

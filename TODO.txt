@@ -3,3 +3,4 @@ TBX::Min
     - check for correct hash values in the constructors of each class
     - implement strict mode where problems like a bad date format or a language not listed in <languages> cause the program to croak, and lax mode where they do not
     - accept a DateTime object for date_created in Min.pm, instead of just a string
+    - use enumerations or something to check proper values of picklists
