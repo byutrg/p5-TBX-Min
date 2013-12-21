@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 31;
+plan tests => 34;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Deep;
@@ -18,7 +18,7 @@ my $args = {
     date_created => '2013-11-12T00:00:00',
     creator => 'foo2',
     license => 'foo3',
-    directionality => 'foo5',
+    directionality => 'bidirectional',
     source_lang => 'foo6',
     target_lang => 'foo7',
     concepts => [
@@ -93,3 +93,29 @@ cmp_deeply($min->concepts->[0], $args->{concepts}->[0],
 throws_ok {TBX::Min->new({date_created => 'stuff'})}
     qr/date is not in ISO8601 format/,
     'exception thrown for bad date';
+
+#check validation of directionality value
+for my $dir (qw(monodirectional bidirectional)){
+    subtest "$dir is a valid directionality value" => sub {
+        plan tests => 2;
+        lives_ok {
+            TBX::Min->new({directionality => $dir});
+        } 'constructor';
+        lives_ok {
+            $min = TBX::Min->new();
+            $min->directionality($dir);
+        } 'accessor';
+    };
+}
+
+subtest 'foo is not a legal directionality value' => sub {
+    plan tests => 2;
+    my $error = qr/illegal directionality 'foo'/i;
+    throws_ok {
+        $min = TBX::Min->new({directionality => 'foo'});
+    } $error, 'constructor';
+    throws_ok {
+        $min = TBX::Min->new();
+        $min->directionality('foo');
+    } $error, 'accessor';
+};

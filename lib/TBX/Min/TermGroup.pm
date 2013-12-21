@@ -1,14 +1,16 @@
 package TBX::Min::TermGroup;
 use strict;
 use warnings;
-use parent 'Class::Accessor';
-TBX::Min::TermGroup->mk_accessors(qw(
+use subs qw(part_of_speech status);
+use Class::Tiny qw(
     term
     part_of_speech
     note
     customer
     status
-));
+);
+use Carp;
+
 # VERSION
 
 # ABSTRACT: Store information from one TBX-Min C<termGroup> element
@@ -45,6 +47,17 @@ Get or set the term text associated with this term group.
 
 Get or set the part of speech associated with this term group.
 
+=cut
+
+sub part_of_speech {
+    my ($self, $pos) = @_;
+    if(defined $pos){
+        _validate_pos($pos);
+        $self->{part_of_speech} = $pos;
+    }
+    return $self->{part_of_speech};
+}
+
 =head2 C<note>
 
 Get or set a note associated with this term group.
@@ -57,10 +70,50 @@ Get or set a customer associated with this term group.
 
 Get or set a status  associated with this term group.
 
+=cut
+
+sub status {
+    my ($self, $status) = @_;
+    if(defined $status){
+        _validate_status($status);
+        $self->{status} = $status;
+    }
+    return $self->{status};
+}
+
 =head1 SEE ALSO
 
 L<TBX::Min>
 
 =cut
+
+sub BUILD {
+    my ($self, $args) = @_;
+    if($args->{part_of_speech}){
+        _validate_pos($args->{part_of_speech});
+    }
+    if($args->{status}){
+        _validate_status($args->{status});
+    }
+    return;
+}
+
+my @allowed_pos = qw(noun properNoun verb adjective adverb other);
+sub _validate_pos {
+    my ($pos) = @_;
+    if(!grep{$pos eq $_} @allowed_pos){
+        croak "Illegal part of speech '$pos'";
+    }
+    return;
+}
+
+my @allowed_status = qw(admitted preferred notRecommended obsolete);
+sub _validate_status {
+    my ($pos) = @_;
+    if(!grep{$pos eq $_} @allowed_status){
+        croak "Illegal status '$pos'";
+    }
+    return;
+}
 
 1;

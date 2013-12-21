@@ -63,7 +63,7 @@ sub test_body {
     isa_ok($term, 'TBX::Min::TermGroup');
     is($term->term, 'hound', 'correct term text');
     is($term->part_of_speech, 'noun', 'correct part of speech');
-    is($term->status, 'deprecated', 'correct status');
+    is($term->status, 'obsolete', 'correct status');
     is($term->customer, 'SAP', 'correct customer');
     is($term->note, 'however bloodhound is used rather than blooddog',
         'correct note');

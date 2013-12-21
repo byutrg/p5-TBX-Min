@@ -27,7 +27,7 @@
                 </termGroup>
                 <termGroup>
                     <term>hound</term>
-                    <termStatus>deprecated</termStatus>
+                    <termStatus>obsolete</termStatus>
                     <partOfSpeech>noun</partOfSpeech>
                     <customer>SAP</customer>
                     <note>however bloodhound is used rather than blooddog</note>

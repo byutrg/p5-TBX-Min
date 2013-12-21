@@ -69,7 +69,7 @@ sub new_from_xml {
             dateCreated => \&_date_created,
             creator => \&_headerAtt,
             license => \&_headerAtt,
-            directionality => \&_headerAtt,
+            directionality => \&_directionality,
             languages => \&_languages,
 
             # becomes part of the current TBX::Min::ConceptEntry object
@@ -125,6 +125,9 @@ sub new {
         #don't store a plain string for datetime
         if(my $dt_string = $args->{date_created}){
             $args->{date_created} = _parse_datetime($dt_string);
+        }
+        if(exists $args->{directionality}){
+            _validate_dir($args->{directionality});
         }
         $self = $args;
     }else{
@@ -225,11 +228,21 @@ the direction of translation this document is designed for.
 =cut
 sub directionality {
     my ($self, $directionality) = @_;
-    if($directionality) {
+    if(defined $directionality) {
+        _validate_dir($directionality);
         return $self->{directionality} = $directionality;
     }
     return $self->{directionality};
 }
+
+sub _validate_dir {
+    my ($dir) = @_;
+    if($dir ne 'bidirectional' and $dir ne 'monodirectional'){
+        croak "Illegal directionality '$dir'";
+    }
+    return;
+}
+
 
 =head2 C<source_lang>
 
@@ -393,6 +406,13 @@ sub _headerAtt {
 	my ($twig, $node) = @_;
 	$twig->{tbx_min_att}->{_decamel($node->name)} = $node->text;
 	return 1;
+}
+
+sub _directionality {
+    my ($twig, $node) = @_;
+    _validate_dir($node->text);
+    $twig->{tbx_min_att}->{directionality} = $node->text;
+    return 1;
 }
 
 sub _date_created {
