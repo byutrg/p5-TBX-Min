@@ -46,6 +46,10 @@ containing this data is required.
 sub new_from_xml {
 	my ($class, $data) = @_;
 
+    if(!$data){
+        croak 'missing required data argument';
+    }
+
 	my $fh = _get_handle($data);
 
 	# build a twig out of the input document
@@ -323,10 +327,10 @@ sub as_xml {
         $writer->characters($self->{$header_att});
         $writer->endTag;
     }
-    if($self->{source_lang} || $self->{target_lang}){
+    if($self->source_lang || $self->target_lang){
         my @atts;
-        push @atts, (source => $self->{source_lang}) if $self->{source_lang};
-        push @atts, (target => $self->{target_lang}) if $self->{target_lang};
+        push @atts, (source => $self->source_lang) if $self->source_lang;
+        push @atts, (target => $self->target_lang) if $self->target_lang;
         $writer->emptyTag('languages', @atts);
     }
     if(my $dt = $self->{date_created}){
