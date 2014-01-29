@@ -3,10 +3,10 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 30;
+plan tests => 29;
 use Test::NoWarnings;
 use Test::Exception;
-use_ok('TBX::Min::TermGroup');
+use TBX::Min::TermGroup;
 use FindBin qw($Bin);
 use Path::Tiny;
 

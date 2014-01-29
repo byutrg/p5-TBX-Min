@@ -3,11 +3,11 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 34;
+plan tests => 33;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Deep;
-use_ok('TBX::Min');
+use TBX::Min;
 use TBX::Min::Entry;
 use FindBin qw($Bin);
 use Path::Tiny;

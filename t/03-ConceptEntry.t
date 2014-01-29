@@ -3,10 +3,10 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 12;
+plan tests => 11;
 use Test::Deep;
 use Test::NoWarnings;
-use_ok('TBX::Min::Entry');
+use TBX::Min::Entry;
 use TBX::Min::LangGroup;
 use FindBin qw($Bin);
 use Path::Tiny;
