@@ -22,13 +22,13 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -46,13 +46,13 @@ __DATA__
         <license>CC BY license can be freely copied and modified</license>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -70,13 +70,13 @@ __DATA__
         <id>TBX sample</id>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -90,17 +90,17 @@ __DATA__
         <directionality>monodirectional</directionality>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
-=== multiple conceptEntries
+=== multiple entries
 --- input
 <?xml version='1.0' encoding="UTF-8"?>
 <TBX dialect="TBX-Min">
@@ -109,20 +109,20 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
-        <conceptEntry id="C003">
+        </entry>
+        <entry id="C003">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -135,14 +135,14 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <subjectField>whatever</subjectField>
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -155,14 +155,14 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
                 </termGroup>
             </langGroup>
             <subjectField>whatever</subjectField>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -175,7 +175,7 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
@@ -186,7 +186,7 @@ __DATA__
                     <term>hund</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -199,7 +199,7 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
@@ -209,7 +209,7 @@ __DATA__
                     <partOfSpeech>noun</partOfSpeech>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -222,7 +222,7 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <partOfSpeech>noun</partOfSpeech>
@@ -232,7 +232,7 @@ __DATA__
                     <term>dog</term>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -245,7 +245,7 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
@@ -272,7 +272,7 @@ __DATA__
                     <partOfSpeech>other</partOfSpeech>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>
 
@@ -285,7 +285,7 @@ __DATA__
         <languages source="de" target="en"/>
     </header>
     <body>
-        <conceptEntry id="C002">
+        <entry id="C002">
             <langGroup xml:lang="en">
                 <termGroup>
                     <term>dog</term>
@@ -304,6 +304,6 @@ __DATA__
                     <termStatus>obsolete</termStatus>
                 </termGroup>
             </langGroup>
-        </conceptEntry>
+        </entry>
     </body>
 </TBX>

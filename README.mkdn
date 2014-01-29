@@ -33,7 +33,7 @@ a hash reference which is used to initialize the object. The allowed hash
 fields are `id`, `description`, `date_created`, `creator`, `license`,
 `directionality`, `source_lang` and `target_lang`, which correspond to
 methods of the same name, and `concepts`, which should be an array reference
-containing `TBX::Min::ConceptEntry` objects. This method croaks if
+containing `TBX::Min::Entry` objects. This method croaks if
 `date_created` is not in ISO 8601 format.
 
 ## `id`
@@ -76,7 +76,7 @@ be ISO 639 and 3166 (e.g. `en-US`, `de`, etc.).
 
 ## `concepts`
 
-Returns an array ref containing the `TBX::Min::ConceptEntry` objects contained
+Returns an array ref containing the `TBX::Min::Entry` objects contained
 in the document.The array ref is the same one used to store the objects
 internally, so additions or removals from the array will be reflected in future
 calls to this method.

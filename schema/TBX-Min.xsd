@@ -51,11 +51,11 @@
   <xs:element name="body">
     <xs:complexType>
       <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="conceptEntry"/>
+        <xs:element maxOccurs="unbounded" ref="entry"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="conceptEntry">
+  <xs:element name="entry">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="subjectField"/>

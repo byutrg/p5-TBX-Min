@@ -60,12 +60,12 @@
    <define name="body">
       <element name="body">
          <oneOrMore>
-            <ref name="conceptEntry"/>
+            <ref name="entry"/>
          </oneOrMore>
       </element>
    </define>
-   <define name="conceptEntry">
-      <element name="conceptEntry">
+   <define name="entry">
+      <element name="entry">
          <attribute name="id">
             <data type="ID"/>
          </attribute>

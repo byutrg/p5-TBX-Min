@@ -5,7 +5,7 @@ use XML::Twig;
 use autodie;
 use Path::Tiny;
 use Carp;
-use TBX::Min::ConceptEntry;
+use TBX::Min::Entry;
 use TBX::Min::LangGroup;
 use TBX::Min::TermGroup;
 use XML::Writer;
@@ -14,7 +14,7 @@ use Try::Tiny;
 # VERSION
 
 unless (caller){
-    use Data::Dumper;
+    require Data::Dumper;
     print Dumper __PACKAGE__->new(@ARGV);
 
 }
@@ -24,7 +24,7 @@ unless (caller){
 
     use TBX::Min;
     my $min = TBX::Min->new('/path/to/file.tbx');
-    my $concepts = $min->concepts;
+    my $entries = $min->entries;
 
 =head1 DESCRIPTION
 
@@ -59,9 +59,9 @@ sub new_from_xml {
         # do_not_chain_handlers => 1, #can be important when things get complicated
         keep_spaces     => 0,
 
-        # these store new conceptEntries, langGroups and termGroups
+        # these store new entries, langGroups and termGroups
         start_tag_handlers => {
-            conceptEntry => \&_conceptStart,
+            entry => \&_conceptStart,
             langGroup => \&_langStart,
             termGroup => \&_termGrpStart,
         },
@@ -76,9 +76,9 @@ sub new_from_xml {
             directionality => \&_directionality,
             languages => \&_languages,
 
-            # becomes part of the current TBX::Min::ConceptEntry object
+            # becomes part of the current TBX::Min::Entry object
             subjectField => sub {
-                shift->{tbx_min_concepts}->[-1]->subject_field($_->text)},
+                shift->{tbx_min_entries}->[-1]->subject_field($_->text)},
 
             # these become attributes of the current TBX::Min::TermGroup object
             term => sub {shift->{tbx_min_current_term_grp}->term($_->text)},
@@ -95,7 +95,7 @@ sub new_from_xml {
     # use handlers to process individual tags, then grab the result
     $twig->parse($fh);
     my $self = $twig->{tbx_min_att};
-    $self->{concepts} = $twig->{tbx_min_concepts} || [];
+    $self->{entries} = $twig->{tbx_min_entries} || [];
     bless $self, $class;
     return $self;
 }
@@ -117,8 +117,8 @@ Creates a new C<TBX::Min> instance. Optionally you may pass in
 a hash reference which is used to initialize the object. The allowed hash
 fields are C<id>, C<description>, C<date_created>, C<creator>, C<license>,
 C<directionality>, C<source_lang> and C<target_lang>, which correspond to
-methods of the same name, and C<concepts>, which should be an array reference
-containing C<TBX::Min::ConceptEntry> objects. This method croaks if
+methods of the same name, and C<entries>, which should be an array reference
+containing C<TBX::Min::Entry> objects. This method croaks if
 C<date_created> is not in ISO 8601 format.
 
 =cut
@@ -137,7 +137,7 @@ sub new {
     }else{
         $self = {};
     }
-    $self->{concepts} ||= [];
+    $self->{entries} ||= [];
     return bless $self, $class;
 }
 
@@ -276,20 +276,20 @@ sub target_lang {
     return $self->{target_lang};
 }
 
-=head2 C<concepts>
+=head2 C<entries>
 
-Returns an array ref containing the C<TBX::Min::ConceptEntry> objects contained
+Returns an array ref containing the C<TBX::Min::Entry> objects contained
 in the document.The array ref is the same one used to store the objects
 internally, so additions or removals from the array will be reflected in future
 calls to this method.
 
 =cut
-sub concepts { ## no critic(RequireArgUnpacking)
+sub entries { ## no critic(RequireArgUnpacking)
     my ($self) = @_;
     if (@_ > 1){
-        croak 'extra argument found (concepts is a getter only)';
+        croak 'extra argument found (entries is a getter only)';
     }
-    return $self->{concepts};
+    return $self->{entries};
 }
 
 =head2 C<add_concept>
@@ -300,10 +300,10 @@ contained by this object.
 =cut
 sub add_concept {
     my ($self, $concept) = @_;
-    if( !$concept || !$concept->isa('TBX::Min::ConceptEntry') ){
-        croak 'argument to add_concept should be a TBx::Min::ConceptEntry';
+    if( !$concept || !$concept->isa('TBX::Min::Entry') ){
+        croak 'argument to add_concept should be a TBx::Min::Entry';
     }
-    push @{$self->{concepts}}, $concept;
+    push @{$self->{entries}}, $concept;
     return;
 }
 
@@ -342,8 +342,8 @@ sub as_xml {
 
     $writer->startTag('body');
 
-    for my $concept (@{$self->concepts}){
-        $writer->startTag('conceptEntry',
+    for my $concept (@{$self->entries}){
+        $writer->startTag('entry',
             $concept->id ? (id => $concept->id) : ());
         if(my $sf = $concept->subject_field){
             $writer->startTag('subjectField');
@@ -390,7 +390,7 @@ sub as_xml {
             }
             $writer->endTag; # langGroup
         }
-        $writer->endTag; # conceptEntry
+        $writer->endTag; # entry
     }
 
     $writer->endTag; # body
@@ -447,20 +447,20 @@ sub _languages{
 # add a new concept entry to the list of those found in this file
 sub _conceptStart {
     my ($twig, $node) = @_;
-    my $concept = TBX::Min::ConceptEntry->new();
+    my $concept = TBX::Min::Entry->new();
     if($node->att('id')){
         $concept->id($node->att('id'));
     }else{
-        carp 'found conceptEntry missing id attribute';
+        carp 'found entry missing id attribute';
     }
-    push @{ $twig->{tbx_min_concepts} }, $concept;
+    push @{ $twig->{tbx_min_entries} }, $concept;
     return 1;
 }
 
 #just set the subject_field of the current concept
 sub _subjectField {
     my ($twig, $node) = @_;
-    $twig->{tbx_min_concepts}->[-1]->
+    $twig->{tbx_min_entries}->[-1]->
         subject_field($node->text);
     return 1;
 }
@@ -476,7 +476,7 @@ sub _langStart {
         carp 'found langGroup missing xml:lang attribute';
     }
 
-    $twig->{tbx_min_concepts}->[-1]->add_lang_group($lang);
+    $twig->{tbx_min_entries}->[-1]->add_lang_group($lang);
     $twig->{tbx_min_current_lang_grp} = $lang;
     return 1;
 }
