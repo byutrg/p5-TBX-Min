@@ -4,13 +4,13 @@ TBX::Min - Read, write and edit TBX-Min files
 
 # VERSION
 
-version 0.03
+version 0.04
 
 # SYNOPSIS
 
-	use TBX::Min;
-	my $min = TBX::Min->new('/path/to/file.tbx');
-	my $concepts = $min->concepts;
+    use TBX::Min;
+    my $min = TBX::Min->new('/path/to/file.tbx');
+    my $entries = $min->entries;
 
 # DESCRIPTION
 
@@ -32,7 +32,7 @@ Creates a new `TBX::Min` instance. Optionally you may pass in
 a hash reference which is used to initialize the object. The allowed hash
 fields are `id`, `description`, `date_created`, `creator`, `license`,
 `directionality`, `source_lang` and `target_lang`, which correspond to
-methods of the same name, and `concepts`, which should be an array reference
+methods of the same name, and `entries`, which should be an array reference
 containing `TBX::Min::Entry` objects. This method croaks if
 `date_created` is not in ISO 8601 format.
 
@@ -74,7 +74,7 @@ be ISO 639 and 3166 (e.g. `en-US`, `de`, etc.).
 Get or set the code representing the document target language. This should
 be ISO 639 and 3166 (e.g. `en-US`, `de`, etc.).
 
-## `concepts`
+## `entries`
 
 Returns an array ref containing the `TBX::Min::Entry` objects contained
 in the document.The array ref is the same one used to store the objects
