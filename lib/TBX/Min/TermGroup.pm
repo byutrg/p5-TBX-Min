@@ -85,8 +85,10 @@ sub status {
 
 L<TBX::Min>
 
-=cut
+=for Pod::Coverage BUILD
 
+=cut
+# above Pod::Coverage makes this not "naked" via Pod::Coverage::TrustPod
 sub BUILD {
     my ($self, $args) = @_;
     if($args->{part_of_speech}){
