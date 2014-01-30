@@ -287,7 +287,7 @@ sub entries { ## no critic(RequireArgUnpacking)
 
 =head2 C<add_entry>
 
-Adds the input C<TBX::Min::LangGroup> object to the list of language groups
+Adds the input C<TBX::Min::Entry> object to the list of language groups
 contained by this object.
 
 =cut
