@@ -8,7 +8,6 @@ use Carp;
 use TBX::Min::Entry;
 use TBX::Min::LangGroup;
 use TBX::Min::TermGroup;
-use XML::Writer;
 use DateTime::Format::ISO8601;
 use Try::Tiny;
 # VERSION
@@ -309,89 +308,78 @@ document.
 =cut
 sub as_xml {
     my ($self) = @_;
-    my $xml;
-    my $writer = XML::Writer->new(
-        OUTPUT => \$xml, NEWLINES => 1, ENCODING => 'utf-8');
-    $writer->startTag('TBX', dialect => 'TBX-Min');
 
-    $writer->startTag('header');
-    for my $header_att (qw(id creator license directionality description)){
+    # construct the whole document using XML::Twig::El's
+    my $root = XML::Twig::Elt->new(TBX => {dialect => 'TBX-Min'});
+    my $header = XML::Twig::Elt->new('header')->paste($root);
+
+    # each of these header elements is a simple element with text
+    for my $header_att (
+            qw(id creator license directionality description)){
         next unless $self->{$header_att};
-        $writer->startTag($header_att);
-        $writer->characters($self->{$header_att});
-        $writer->endTag;
+        my $el = XML::Twig::Elt->new($header_att,
+            $self->{$header_att})->paste(last_child => $header);
     }
     if($self->source_lang || $self->target_lang){
         my @atts;
         push @atts, (source => $self->source_lang) if $self->source_lang;
         push @atts, (target => $self->target_lang) if $self->target_lang;
-        $writer->emptyTag('languages', @atts);
+        XML::Twig::Elt->new(languages => {@atts})->paste(
+            last_child => $header)
     }
     if(my $dt = $self->{date_created}){
-        $writer->startTag('dateCreated');
-        $writer->characters($dt->iso8601);
-        $writer->endTag;
+        XML::Twig::Elt->new(dateCreated => $dt->iso8601)->paste(
+            last_child => $header);
     }
-    $writer->endTag; # header
 
-    $writer->startTag('body');
-
-    for my $concept (@{$self->entries}){
-        $writer->startTag('entry',
-            $concept->id ? (id => $concept->id) : ());
-        if(my $sf = $concept->subject_field){
-            $writer->startTag('subjectField');
-            $writer->characters($sf);
-            $writer->endTag;
+    my $body = XML::Twig::Elt->new('body')->paste(last_child => $root);
+    for my $entry (@{$self->entries}){
+        my $entry_el = XML::Twig::Elt->new(
+            entry => {$entry->id ? (id => $entry->id) : ()})->
+            paste(last_child => $body);
+        if(my $sf = $entry->subject_field){
+            XML::Twig::Elt->new(subjectField => $sf)->paste(
+                last_child => $entry_el);
         }
-        for my $langGrp (@{$concept->lang_groups}){
-            $writer->startTag('langGroup',
-                $langGrp->code ? ('xml:lang' => $langGrp->code) : () );
+        for my $langGrp (@{$entry->lang_groups}){
+            my $lang_el = XML::Twig::Elt->new(langGroup =>
+                {$langGrp->code ? ('xml:lang' => $langGrp->code) : ()}
+            )->paste(last_child => $entry_el);
             for my $termGrp (@{$langGrp->term_groups}){
-                $writer->startTag('termGroup');
-
+                my $term_el = XML::Twig::Elt->new('termGroup')->paste(
+                    last_child => $lang_el);
                 if (my $term = $termGrp->term){
-                    $writer->startTag('term');
-                    $writer->characters($term);
-                    $writer->endTag; # term
+                    XML::Twig::Elt->new(term => $term)->paste(
+                        last_child => $term_el);
                 }
 
                 if (my $customer = $termGrp->customer){
-                    $writer->startTag('customer');
-                    $writer->characters($customer);
-                    $writer->endTag; # customer
+                    XML::Twig::Elt->new(customer => $customer)->paste(
+                        last_child => $term_el);
                 }
 
                 if (my $note = $termGrp->note){
-                    $writer->startTag('note');
-                    $writer->characters($note);
-                    $writer->endTag; # note
+                    XML::Twig::Elt->new(note => $note)->paste(
+                        last_child => $term_el);
                 }
 
                 if (my $status = $termGrp->status){
-                    $writer->startTag('termStatus');
-                    $writer->characters($status);
-                    $writer->endTag; # termStatus
+                    XML::Twig::Elt->new(termStatus => $status )->paste(
+                        last_child => $term_el);
                 }
 
                 if (my $pos = $termGrp->part_of_speech){
-                    $writer->startTag('partOfSpeech');
-                    $writer->characters($pos);
-                    $writer->endTag; # partOfSpeech
+                    XML::Twig::Elt->new(partOfSpeech => $pos)->paste(
+                        last_child => $term_el);
                 }
 
-                $writer->endTag; # termGroup
-            }
-            $writer->endTag; # langGroup
-        }
-        $writer->endTag; # entry
-    }
+            } # end termGroup
+        } # end langGroup
+    } # end entry
 
-    $writer->endTag; # body
-
-    $writer->endTag; # TBX
-    $writer->end;
-    return $xml;
+    # return pretty-printed string
+    XML::Twig->set_pretty_print('indented');
+    return $root->sprint;
 }
 
 ######################
