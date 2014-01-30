@@ -2,10 +2,10 @@ TBX::Min
 
     Next: write a quick test to check that directionality value is validated during parsing
 
+    - use some sort of enum module for picklists; automatic validation!
     - use Class::Tiny everywhere
     - test that picklist values, etc. are checked during parsing
     - implement strict mode where problems like a bad date format or a language not listed in <languages> cause the program to croak, and lax mode where they do not
     - accept a DateTime object for date_created in Min.pm, instead of just a string
-    - pretty-print XML
     - check input: no empty strings allowed.
     - check parsing success: catch errors
