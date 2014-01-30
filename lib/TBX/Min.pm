@@ -302,8 +302,8 @@ sub add_entry {
 
 =head2 C<as_xml>
 
-Returns a string pointer containing an XML representation of this TBX-Min
-document.
+Returns a scalar reference containing an XML representation of this
+TBX-Min document.
 
 =cut
 sub as_xml {
@@ -379,7 +379,7 @@ sub as_xml {
 
     # return pretty-printed string
     XML::Twig->set_pretty_print('indented');
-    return $root->sprint;
+    return \$root->sprint;
 }
 
 ######################
