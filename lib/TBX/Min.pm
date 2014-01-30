@@ -317,7 +317,7 @@ sub as_xml {
     for my $header_att (
             qw(id creator license directionality description)){
         next unless $self->{$header_att};
-        my $el = XML::Twig::Elt->new($header_att,
+        XML::Twig::Elt->new($header_att,
             $self->{$header_att})->paste(last_child => $header);
     }
     if($self->source_lang || $self->target_lang){
