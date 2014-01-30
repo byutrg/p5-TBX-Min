@@ -286,18 +286,18 @@ sub entries { ## no critic(RequireArgUnpacking)
     return $self->{entries};
 }
 
-=head2 C<add_concept>
+=head2 C<add_entry>
 
 Adds the input C<TBX::Min::LangGroup> object to the list of language groups
 contained by this object.
 
 =cut
-sub add_concept {
-    my ($self, $concept) = @_;
-    if( !$concept || !$concept->isa('TBX::Min::Entry') ){
-        croak 'argument to add_concept should be a TBx::Min::Entry';
+sub add_entry {
+    my ($self, $entry) = @_;
+    if( !$entry || !$entry->isa('TBX::Min::Entry') ){
+        croak 'argument to add_entry should be a TBx::Min::Entry';
     }
-    push @{$self->{entries}}, $concept;
+    push @{$self->{entries}}, $entry;
     return;
 }
 
