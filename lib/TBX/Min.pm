@@ -13,12 +13,6 @@ use DateTime::Format::ISO8601;
 use Try::Tiny;
 # VERSION
 
-unless (caller){
-    require Data::Dumper;
-    print Dumper __PACKAGE__->new(@ARGV);
-
-}
-
 # ABSTRACT: Read, write and edit TBX-Min files
 =head1 SYNOPSIS
 
