@@ -4,7 +4,7 @@ TBX::Min - Read, write and edit TBX-Min files
 
 # VERSION
 
-version 0.04
+version 0.05
 
 # SYNOPSIS
 
@@ -81,15 +81,15 @@ in the document.The array ref is the same one used to store the objects
 internally, so additions or removals from the array will be reflected in future
 calls to this method.
 
-## `add_concept`
+## `add_entry`
 
-Adds the input `TBX::Min::LangGroup` object to the list of language groups
+Adds the input `TBX::Min::Entry` object to the list of language groups
 contained by this object.
 
 ## `as_xml`
 
-Returns a string pointer containing an XML representation of this TBX-Min
-document.
+Returns a scalar reference containing an XML representation of this
+TBX-Min document.
 
 # AUTHOR
 
