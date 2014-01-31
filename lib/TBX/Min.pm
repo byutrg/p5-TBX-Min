@@ -60,6 +60,7 @@ sub new_from_xml {
         },
 
         TwigHandlers    => {
+            TBX => \&_check_dialect,
             # header attributes become attributes of the TBX::Min object
             id => \&_headerAtt,
             description => \&_headerAtt,
@@ -385,8 +386,20 @@ sub as_xml {
 ######################
 ### XML TWIG HANDLERS
 ######################
-# all of the twig handlers store state on the XML::Twig object. A bit kludgy,
-# but it works.
+
+# croak if the user happened to use the wrong dialect of TBX
+sub _check_dialect {
+    my ($twig, $node) = @_;
+    my $type = $node->att('dialect') || 'unknown';
+    my $expected = 'TBX-Min';
+    if($type ne $expected){
+        croak "Input TBX is $type (should be '$expected')";
+    }
+    return 1;
+}
+
+# most of the twig handlers store state on the XML::Twig object.
+# A bit kludgy, but it works.
 
 sub _headerAtt {
     my ($twig, $node) = @_;
