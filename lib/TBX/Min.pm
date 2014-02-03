@@ -534,6 +534,8 @@ This should be fixed in the future.
 
 =head1 SEE ALSO
 
+The following related modules:
+
 =over
 
 =item L<TBX::Min::Entry>
@@ -547,3 +549,6 @@ This should be fixed in the future.
 =item L<Convert::TBX::Basic>
 
 =back
+
+Schema for valiating TBX-Min files are available on
+L<GitHub|https://github.com/byutrg/TBX-Spec>.
