@@ -85,8 +85,7 @@ sub new_from_xml {
 
     # build a twig out of the input document
     my $twig = XML::Twig->new(
-        # pretty_print    => 'nice', #this seems to affect other created twigs, too
-        # output_encoding => 'UTF-8',
+        output_encoding => 'UTF-8',
         # do_not_chain_handlers => 1, #can be important when things get complicated
         keep_spaces     => 0,
 
@@ -342,7 +341,7 @@ sub add_entry {
 =head2 C<as_xml>
 
 Returns a scalar reference containing an XML representation of this
-TBX-Min document.
+TBX-Min document. The data is a UTF-8 encoded string.
 
 =cut
 sub as_xml {
