@@ -20,6 +20,7 @@ sub import {
     TBX::Min::Entry->import::into($target);
     TBX::Min::LangGroup->import::into($target);
     TBX::Min::TermGroup->import::into($target);
+    return;
 }
 
 =head1 SYNOPSIS
@@ -426,7 +427,7 @@ sub as_xml {
 
 # croak if the user happened to use the wrong dialect of TBX
 sub _check_dialect {
-    my ($twig, $node) = @_;
+    my (undef, $node) = @_;
     my $type = $node->att('dialect') || 'unknown';
     my $expected = 'TBX-Min';
     if($type ne $expected){
