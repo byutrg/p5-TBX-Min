@@ -1,7 +1,8 @@
 Revision history for TBX-Min
 
 {{$NEXT}}
-
+    use Import::Into to import other classes
+    updated documentation
 0.05      2014-01-30 14:55:25 America/Los_Angeles
     Fixed warning on 5.10.X
     add_concept changed to add_entry as should have been done in 0.04

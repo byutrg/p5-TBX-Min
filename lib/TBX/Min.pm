@@ -1,6 +1,8 @@
 package TBX::Min;
 use strict;
 use warnings;
+# VERSION
+# ABSTRACT: Read, write and edit TBX-Min files
 use XML::Twig;
 use autodie;
 use Path::Tiny;
@@ -8,22 +10,38 @@ use Carp;
 use TBX::Min::Entry;
 use TBX::Min::LangGroup;
 use TBX::Min::TermGroup;
+use Import::Into;
 use DateTime::Format::ISO8601;
 use Try::Tiny;
-# VERSION
 
-# ABSTRACT: Read, write and edit TBX-Min files
+# Use Import::Into to export subclasses into caller
+sub import {
+    my $target = caller;
+    TBX::Min::Entry->import::into($target);
+    TBX::Min::LangGroup->import::into($target);
+    TBX::Min::TermGroup->import::into($target);
+}
+
 =head1 SYNOPSIS
 
     use TBX::Min;
     my $min = TBX::Min->new('/path/to/file.tbx');
     my $entries = $min->entries;
+    my $entry = TBX::Min::Entry->new({id => 'B001'});
+    $min->add_entry($entry);
 
 =head1 DESCRIPTION
 
 TBX-Min is a minimal, DCT-style dialect of TBX. This module
 allows you to read, write and edit the contents of TBX-Min
 data.
+
+C<use>ing this module also automatically C<use>s L<TBX::Min::Entry>,
+L<TBX::Min::LangGroup>, and L<TBX::Min::TermGroup> via
+L<Import::Into>. LangGroups contain TermGroups, Entries contain
+LangGroups, and this class contains Entries. You can build up TBX::Min
+documents this way and then print them via L</as_xml>. You can also
+read an entire TBX-Min XML document for editing via L</new_from_xml>.
 
 =cut
 
