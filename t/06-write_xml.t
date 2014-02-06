@@ -10,7 +10,7 @@ use Test::XML;
 use FindBin qw($Bin);
 use Path::Tiny;
 
-my $basic_path = path($Bin, 'corpus', 'basic.tbx');
+my $basic_path = path($Bin, 'corpus', 'min.tbx');
 my $basic_txt = $basic_path->slurp;
 
 my $min = TBX::Min->new_from_xml($basic_path);

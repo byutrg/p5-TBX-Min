@@ -10,7 +10,7 @@ use FindBin qw($Bin);
 use Path::Tiny;
 use Test::Exception;
 
-my $basic_path = path($Bin, 'corpus', 'basic.tbx');
+my $basic_path = path($Bin, 'corpus', 'min.tbx');
 my $basic_txt = $basic_path->slurp;
 
 note('reading XML file');
