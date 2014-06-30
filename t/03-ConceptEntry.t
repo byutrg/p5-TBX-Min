@@ -1,4 +1,4 @@
-# test the functionality of TBX::Min::Entry
+# test the functionality of TBX::Min::TermEntry
 
 use strict;
 use warnings;
@@ -20,8 +20,8 @@ my $args = {
 };
 
 #test constructor without arguments
-my $concept = TBX::Min::Entry->new;
-isa_ok($concept, 'TBX::Min::Entry');
+my $concept = TBX::Min::TermEntry->new;
+isa_ok($concept, 'TBX::Min::TermEntry');
 
 ok(!$concept->id, 'id not defined by default');
 ok(!$concept->subject_field,
@@ -30,7 +30,7 @@ is_deeply($concept->lang_groups, [],
     'lang_groups returns empty array by default');
 
 #test constructor with arguments
-$concept = TBX::Min::Entry->new($args);
+$concept = TBX::Min::TermEntry->new($args);
 is($concept->id, $args->{id}, 'correct id from constructor');
 is($concept->subject_field, $args->{subject_field},
     'correct subject_field from constructor');
@@ -38,7 +38,7 @@ cmp_deeply($concept->lang_groups, $args->{lang_groups},
     'correct term groups from constructor');
 
 #test setters
-$concept = TBX::Min::Entry->new();
+$concept = TBX::Min::TermEntry->new();
 
 $concept->id($args->{id});
 is($concept->id, $args->{id}, 'id correctly set');
