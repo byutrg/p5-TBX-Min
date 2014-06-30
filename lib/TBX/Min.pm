@@ -376,6 +376,8 @@ sub as_xml {
         my $entry_el = XML::Twig::Elt->new(
             termEntry => {$termEntry->id ? (id => $termEntry->id) : ()})->
             paste(last_child => $body);
+        $entry_el = XML::Twig::Elt->new( '#COMMENT', 'terminological entry');->
+            paste(last_child => $body); =
         if(my $sf = $termEntry->subject_field){
             XML::Twig::Elt->new(subjectField => $sf)->paste(
                 last_child => $entry_el);
