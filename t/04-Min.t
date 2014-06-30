@@ -21,8 +21,8 @@ my $args = {
     source_lang => 'foo6',
     target_lang => 'foo7',
     entries => [
-        TBX::Min::Entry->new({id => 'foo'}),
-        TBX::Min::Entry->new({id => 'bar'}),
+        TBX::Min::TermEntry->new({id => 'foo'}),
+        TBX::Min::TermEntry->new({id => 'bar'}),
     ],
 };
 
