@@ -420,7 +420,9 @@ sub as_xml {
 
     # return pretty-printed string
     XML::Twig->set_pretty_print('indented');
-    return \$root->sprint;
+    my $TBXmin = \$root->sprint;
+	$$TBXmin =~ s/>[\s\t\n]*<!--/><!--/g;  #force comments to be on same line as their parent
+	return $TBXmin;
 }
 
 ######################
