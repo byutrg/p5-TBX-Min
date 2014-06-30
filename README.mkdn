@@ -11,18 +11,18 @@ version 0.06
     use TBX::Min;
     my $min = TBX::Min->new('/path/to/file.tbx');
     my $entries = $min->entries;
-    my $entry = TBX::Min::Entry->new({id => 'B001'});
-    $min->add_entry($entry);
+    my $termEntry = TBX::Min::TermEntry->new({id => 'B001'});
+    $min->add_entry($termEntry);
 
 # DESCRIPTION
 
 This module allows you to read, write and edit the contents of TBX-Min
 data.
 
-`use`ing this module also automatically `use`s [TBX::Min::Entry](http://search.cpan.org/perldoc?TBX::Min::Entry),
-[TBX::Min::LangGroup](http://search.cpan.org/perldoc?TBX::Min::LangGroup), and [TBX::Min::TermGroup](http://search.cpan.org/perldoc?TBX::Min::TermGroup) via
-[Import::Into](http://search.cpan.org/perldoc?Import::Into). LangGroups contain TermGroups, Entries contain
-LangGroups, and this class contains Entries. These correspond to the
+`use`ing this module also automatically `use`s [TBX::Min::TermEntry](http://search.cpan.org/perldoc?TBX::Min::TermEntry),
+[TBX::Min::LangSet](http://search.cpan.org/perldoc?TBX::Min::LangSet), and [TBX::Min::TIG](http://search.cpan.org/perldoc?TBX::Min::TIG) via
+[Import::Into](http://search.cpan.org/perldoc?Import::Into). LangSets contain TIGs(Term Information Groups), TermEntries contain
+LangSets, and this class contains TermEntries. These correspond to the
 three levels of information found in TML. You can build up TBX::Min
 documents this way and then print them via ["as\_xml"](#as\_xml). You can also
 read an entire TBX-Min XML document for editing via ["new\_from\_xml"](#new\_from\_xml).
@@ -64,7 +64,7 @@ a hash reference which is used to initialize the object. The allowed hash
 fields are `id`, `description`, `date_created`, `creator`, `license`,
 `directionality`, `source_lang` and `target_lang`, which correspond to
 methods of the same name, and `entries`, which should be an array reference
-containing `TBX::Min::Entry` objects. This method croaks if
+containing `TBX::Min::TermEntry` objects. This method croaks if
 `date_created` is not in ISO 8601 format.
 
 ## `id`
@@ -107,14 +107,14 @@ be ISO 639 and 3166 (e.g. `en-US`, `de`, etc.).
 
 ## `entries`
 
-Returns an array ref containing the `TBX::Min::Entry` objects contained
+Returns an array ref containing the `TBX::Min::TermEntry` objects contained
 in the document.The array ref is the same one used to store the objects
 internally, so additions or removals from the array will be reflected in future
 calls to this method.
 
 ## `add_entry`
 
-Adds the input `TBX::Min::Entry` object to the list of language groups
+Adds the input `TBX::Min::TermEntry` object to the list of language groups
 contained by this object.
 
 ## `as_xml`
@@ -132,9 +132,9 @@ This should be fixed in the future.
 
 The following related modules:
 
-- [TBX::Min::Entry](http://search.cpan.org/perldoc?TBX::Min::Entry)
-- [TBX::Min::LangGroup](http://search.cpan.org/perldoc?TBX::Min::LangGroup)
-- [TBX::Min::TermGroup](http://search.cpan.org/perldoc?TBX::Min::TermGroup)
+- [TBX::Min::TermEntry](http://search.cpan.org/perldoc?TBX::Min::TermEntry)
+- [TBX::Min::LangSet](http://search.cpan.org/perldoc?TBX::Min::LangSet)
+- [TBX::Min::TIG](http://search.cpan.org/perldoc?TBX::Min::TIG)
 - [Convert::TBX::Min](http://search.cpan.org/perldoc?Convert::TBX::Min)
 - [Convert::TBX::Basic](http://search.cpan.org/perldoc?Convert::TBX::Basic)
 

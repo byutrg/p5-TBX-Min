@@ -1,4 +1,4 @@
-# test the functionality of TBX::Min::LangGroup
+# test the functionality of TBX::Min::LangSet
 
 use strict;
 use warnings;
@@ -13,27 +13,27 @@ use Path::Tiny;
 my $args = {
     code => 'en',
     term_groups => [
-        TBX::Min::TermGroup->new({term => 'foo'}),
-        TBX::Min::TermGroup->new({term => 'bar'}),
+        TBX::Min::TIG->new({term => 'foo'}),
+        TBX::Min::TIG->new({term => 'bar'}),
     ],
 };
 
 #test constructor without arguments
-my $lang_grp = TBX::Min::LangGroup->new;
-isa_ok($lang_grp, 'TBX::Min::LangGroup');
+my $lang_grp = TBX::Min::LangSet->new;
+isa_ok($lang_grp, 'TBX::Min::LangSet');
 
 ok(!$lang_grp->code, 'language not defined by default');
 cmp_deeply($lang_grp->term_groups, [],
     'term_groups returns empty array by default');
 
 #test constructor with arguments
-$lang_grp = TBX::Min::LangGroup->new($args);
+$lang_grp = TBX::Min::LangSet->new($args);
 is($lang_grp->code, $args->{code}, 'correct language code from constructor');
 cmp_deeply($lang_grp->term_groups, $args->{term_groups},
     'correct term groups from constructor');
 
 #test setters
-$lang_grp = TBX::Min::LangGroup->new();
+$lang_grp = TBX::Min::LangSet->new();
 
 $lang_grp->code($args->{code});
 is($lang_grp->code, $args->{code}, 'code correctly set');

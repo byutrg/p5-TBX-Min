@@ -8,8 +8,8 @@ use autodie;
 use Path::Tiny;
 use Carp;
 use TBX::Min::TermEntry;
-use TBX::Min::LangGroup;
-use TBX::Min::TermGroup;
+use TBX::Min::LangSet;
+use TBX::Min::TIG;
 use Import::Into;
 use DateTime::Format::ISO8601;
 use Try::Tiny;
@@ -18,8 +18,8 @@ use Try::Tiny;
 sub import {
     my $target = caller;
     TBX::Min::TermEntry->import::into($target);
-    TBX::Min::LangGroup->import::into($target);
-    TBX::Min::TermGroup->import::into($target);
+    TBX::Min::LangSet->import::into($target);
+    TBX::Min::TIG->import::into($target);
     return;
 }
 
@@ -28,8 +28,8 @@ sub import {
     use TBX::Min;
     my $min = TBX::Min->new('/path/to/file.tbx');
     my $entries = $min->entries;
-    my $entry = TBX::Min::TermEntry->new({id => 'B001'});
-    $min->add_entry($entry);
+    my $termEntry = TBX::Min::TermEntry->new({id => 'B001'});
+    $min->add_entry($termEntry);
 
 =head1 DESCRIPTION
 
@@ -37,9 +37,9 @@ This module allows you to read, write and edit the contents of TBX-Min
 data.
 
 C<use>ing this module also automatically C<use>s L<TBX::Min::TermEntry>,
-L<TBX::Min::LangGroup>, and L<TBX::Min::TermGroup> via
-L<Import::Into>. LangGroups contain TermGroups, Entries contain
-LangGroups, and this class contains Entries. These correspond to the
+L<TBX::Min::LangSet>, and L<TBX::Min::TIG> via
+L<Import::Into>. LangSets contain TIGs(Term Information Groups), termEntries contain
+LangSets, and this class contains termEntries. These correspond to the
 three levels of information found in TML. You can build up TBX::Min
 documents this way and then print them via L</as_xml>. You can also
 read an entire TBX-Min XML document for editing via L</new_from_xml>.
@@ -90,11 +90,11 @@ sub new_from_xml {
         # do_not_chain_handlers => 1, #can be important when things get complicated
         keep_spaces     => 0,
 
-        # these store new entries, langGroups and termGroups
+        # these store new entries, langSets and tigs
         start_tag_handlers => {
-            entry => \&_conceptStart,
-            langGroup => \&_langStart,
-            termGroup => \&_termGrpStart,
+            termEntry => \&_conceptStart,
+            langSet => \&_langStart,	#langset
+            tig => \&_termGrpStart, #tig
         },
 
         TwigHandlers    => {
@@ -112,7 +112,7 @@ sub new_from_xml {
             subjectField => sub {
                 shift->{tbx_min_entries}->[-1]->subject_field($_->text)},
 
-            # these become attributes of the current TBX::Min::TermGroup object
+            # these become attributes of the current TBX::Min::TIG object
             term => sub {shift->{tbx_min_current_term_grp}->term($_->text)},
             partOfSpeech => sub {
                 shift->{tbx_min_current_term_grp}->part_of_speech($_->text)},
@@ -331,11 +331,11 @@ contained by this object.
 
 =cut
 sub add_entry {
-    my ($self, $entry) = @_;
-    if( !$entry || !$entry->isa('TBX::Min::TermEntry') ){
+    my ($self, $termEntry) = @_;
+    if( !$termEntry || !$termEntry->isa('TBX::Min::TermEntry') ){
         croak 'argument to add_entry should be a TBx::Min::TermEntry';
     }
-    push @{$self->{entries}}, $entry;
+    push @{$self->{entries}}, $termEntry;
     return;
 }
 
@@ -372,20 +372,20 @@ sub as_xml {
     }
 
     my $body = XML::Twig::Elt->new('body')->paste(last_child => $root);
-    for my $entry (@{$self->entries}){
+    for my $termEntry (@{$self->entries}){
         my $entry_el = XML::Twig::Elt->new(
-            entry => {$entry->id ? (id => $entry->id) : ()})->
+            termEntry => {$termEntry->id ? (id => $termEntry->id) : ()})->
             paste(last_child => $body);
-        if(my $sf = $entry->subject_field){
+        if(my $sf = $termEntry->subject_field){
             XML::Twig::Elt->new(subjectField => $sf)->paste(
                 last_child => $entry_el);
         }
-        for my $langGrp (@{$entry->lang_groups}){
-            my $lang_el = XML::Twig::Elt->new(langGroup =>
+        for my $langGrp (@{$termEntry->lang_groups}){
+            my $lang_el = XML::Twig::Elt->new(langSet =>
                 {$langGrp->code ? ('xml:lang' => $langGrp->code) : ()}
             )->paste(last_child => $entry_el);
             for my $termGrp (@{$langGrp->term_groups}){
-                my $term_el = XML::Twig::Elt->new('termGroup')->paste(
+                my $term_el = XML::Twig::Elt->new('tig')->paste(
                     last_child => $lang_el);
                 if (my $term = $termGrp->term){
                     XML::Twig::Elt->new(term => $term)->paste(
@@ -412,9 +412,9 @@ sub as_xml {
                         last_child => $term_el);
                 }
 
-            } # end termGroup
-        } # end langGroup
-    } # end entry
+            } # end tig
+        } # end langSet
+    } # end termEntry
 
     # return pretty-printed string
     XML::Twig->set_pretty_print('indented');
@@ -477,14 +477,14 @@ sub _languages{
     return 1;
 }
 
-# add a new concept entry to the list of those found in this file
+# add a new concept termEntry to the list of those found in this file
 sub _conceptStart {
     my ($twig, $node) = @_;
     my $concept = TBX::Min::TermEntry->new();
     if($node->att('id')){
         $concept->id($node->att('id'));
     }else{
-        carp 'found entry missing id attribute';
+        carp 'found termEntry missing id attribute';
     }
     push @{ $twig->{tbx_min_entries} }, $concept;
     return 1;
@@ -498,15 +498,15 @@ sub _subjectField {
     return 1;
 }
 
-# Create a new LangGroup, add it to the current concept,
-# and set it as the current LangGroup.
+# Create a new langSet, add it to the current concept,
+# and set it as the current langSet.
 sub _langStart {
     my ($twig, $node) = @_;
-    my $lang = TBX::Min::LangGroup->new();
+    my $lang = TBX::Min::LangSet->new();
     if($node->att('xml:lang')){
         $lang->code($node->att('xml:lang'));
     }else{
-        carp 'found langGroup missing xml:lang attribute';
+        carp 'found langSet missing xml:lang attribute';
     }
 
     $twig->{tbx_min_entries}->[-1]->add_lang_group($lang);
@@ -514,11 +514,11 @@ sub _langStart {
     return 1;
 }
 
-# Create a new termGroup, add it to the current langGroup,
-# and set it as the current termGroup.
+# Create a new tig, add it to the current langSet,
+# and set it as the current tig.
 sub _termGrpStart {
     my ($twig) = @_;
-    my $term = TBX::Min::TermGroup->new();
+    my $term = TBX::Min::TIG->new();
     $twig->{tbx_min_current_lang_grp}->add_term_group($term);
     $twig->{tbx_min_current_term_grp} = $term;
     return 1;
@@ -540,9 +540,9 @@ The following related modules:
 
 =item L<TBX::Min::TermEntry>
 
-=item L<TBX::Min::LangGroup>
+=item L<TBX::Min::LangSet>
 
-=item L<TBX::Min::TermGroup>
+=item L<TBX::Min::TIG>
 
 =item L<Convert::TBX::Min>
 

@@ -14,8 +14,8 @@ my $args = {
     id => 'B001',
     subject_field => 'foo',
     lang_groups => [
-        TBX::Min::LangGroup->new({code => 'en'}),
-        TBX::Min::LangGroup->new({code => 'zh'}),
+        TBX::Min::LangSet->new({code => 'en'}),
+        TBX::Min::LangSet->new({code => 'zh'}),
     ],
 };
 

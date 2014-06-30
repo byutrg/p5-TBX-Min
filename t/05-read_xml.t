@@ -49,7 +49,7 @@ sub test_body {
     is(scalar @$entries, 3, 'found three entries');
 
     my $concept = $entries->[0];
-    isa_ok($concept, 'TBX::Min::Entry');
+    isa_ok($concept, 'TBX::Min::TermEntry');
     is($concept->id, 'C002', 'correct concept ID');
     is($concept->subject_field, 'biology',
         'correct concept subject field');
@@ -57,13 +57,13 @@ sub test_body {
     is(scalar @$languages, 2, 'found two languages');
 
     my $language = $languages->[1];
-    isa_ok($language, 'TBX::Min::LangGroup');
+    isa_ok($language, 'TBX::Min::LangSet');
     is($language->code, 'en', 'language is English');
     my $terms = $language->term_groups;
     is(scalar @$terms, 2, 'found two terms');
 
     my $term = $terms->[1];
-    isa_ok($term, 'TBX::Min::TermGroup');
+    isa_ok($term, 'TBX::Min::TIG');
     is($term->term, 'hound', 'correct term text');
     is($term->part_of_speech, 'noun', 'correct part of speech');
     is($term->status, 'obsolete', 'correct status');

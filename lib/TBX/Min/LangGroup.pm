@@ -1,18 +1,18 @@
-package TBX::Min::LangGroup;
+package TBX::Min::LangSet;
 use strict;
 use warnings;
 use Carp;
 # VERSION
 
-# ABSTRACT: Store information from one TBX-Min C<langGroup> element
+# ABSTRACT: Store information from one TBX-Min C<langSet> element
 =head1 SYNOPSIS
 
-    use TBX::Min::LangGroup;
-    use TBX::Min::TermGroup;
-    my $lang_grp = TBX::Min::LangGroup->new(
+    use TBX::Min::LangSet;
+    use TBX::Min::TIG;
+    my $lang_grp = TBX::Min::LangSet->new(
         {code => 'en'});
     print $lang_grp->lang(); # 'en'
-    my $term_grp = TBX::Min::TermGroup->new({term => 'perl'});
+    my $term_grp = TBX::Min::TIG->new({term => 'perl'});
     $lang_grp->add_term_group($term_grp);
     my $term_grps = $lang_grp->term_groups;
     print $#$term_grps; # '1'
@@ -20,7 +20,7 @@ use Carp;
 =head1 DESCRIPTION
 
 This class represents a single language group contained in a TBX-Min file.
-A language group is contained by a concept entry, and contains several term
+A language group is contained by a concept termEntry, and contains several term
 groups each representing a given concept for the same language.
 
 =cut
@@ -29,11 +29,11 @@ groups each representing a given concept for the same language.
 
 =head2 C<new>
 
-Creates a new C<TBX::Min::LangGroup> instance. Optionally you may pass in
+Creates a new C<TBX::Min::LangSet> instance. Optionally you may pass in
 a hash reference which is used to initialize the object. The allowed hash
 fields are C<code> and C<term_groups>, where C<code> corresponds to the
 method of the same name, and C<term_groups> is an array reference containing
-C<TBX::Min::LangGroup> objects.
+C<TBX::Min::LangSet> objects.
 
 =cut
 sub new {
@@ -64,8 +64,8 @@ sub code {
 
 =head2 C<term_groups>
 
-Returns an array ref containing all of the C<TBX::Min::TermGroup> objects
-in this concept entry. The array ref is the same one used to store the objects
+Returns an array ref containing all of the C<TBX::Min::TIG> objects
+in this concept termEntry. The array ref is the same one used to store the objects
 internally, so additions or removals from the array will be reflected in future
 calls to this method.
 
@@ -80,14 +80,14 @@ sub term_groups { ## no critic(RequireArgUnpacking)
 
 =head2 C<add_term_group>
 
-Adds the input C<TBX::Min::TermGroup> object to the list of language groups
+Adds the input C<TBX::Min::TIG> object to the list of language groups
 contained by this object.
 
 =cut
 sub add_term_group {
     my ($self, $term_grp) = @_;
-    if( !$term_grp || !$term_grp->isa('TBX::Min::TermGroup') ){
-        croak 'argument to add_term_group should be a TBx::Min::TermGroup';
+    if( !$term_grp || !$term_grp->isa('TBX::Min::TIG') ){
+        croak 'argument to add_term_group should be a TBx::Min::TIG';
     }
     push @{$self->{term_groups}}, $term_grp;
     return;

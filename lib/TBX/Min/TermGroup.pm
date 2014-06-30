@@ -1,4 +1,4 @@
-package TBX::Min::TermGroup;
+package TBX::Min::TIG;
 use strict;
 use warnings;
 use subs qw(part_of_speech status);
@@ -13,11 +13,11 @@ use Carp;
 
 # VERSION
 
-# ABSTRACT: Store information from one TBX-Min C<termGroup> element
+# ABSTRACT: Store information from one TBX-Min C<tig> element
 =head1 SYNOPSIS
 
-    use TBX::Min::TermGroup;
-    my $term_grp = TBX::Min::TermGroup->new(
+    use TBX::Min::TIG;
+    my $term_grp = TBX::Min::TIG->new(
         {term => 'bat signal', status => "preferred"});
     $term_grp->part_of_speech('noun');
     $term_grp->customer('GCPD');
@@ -35,7 +35,7 @@ speech, a note, or the associated customer.
 
 =head2 C<new>
 
-Creates a new C<TBX::Min::TermGroup> instance. Optionally you may pass in a hash
+Creates a new C<TBX::Min::TIG> instance. Optionally you may pass in a hash
 reference which is used to initialized the object. The fields of the hash
 correspond to the names of the accessor methods listed below.
 
