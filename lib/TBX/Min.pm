@@ -7,7 +7,7 @@ use XML::Twig;
 use autodie;
 use Path::Tiny;
 use Carp;
-use TBX::Min::Entry;
+use TBX::Min::TermEntry;
 use TBX::Min::LangGroup;
 use TBX::Min::TermGroup;
 use Import::Into;
@@ -17,7 +17,7 @@ use Try::Tiny;
 # Use Import::Into to export subclasses into caller
 sub import {
     my $target = caller;
-    TBX::Min::Entry->import::into($target);
+    TBX::Min::TermEntry->import::into($target);
     TBX::Min::LangGroup->import::into($target);
     TBX::Min::TermGroup->import::into($target);
     return;
@@ -28,7 +28,7 @@ sub import {
     use TBX::Min;
     my $min = TBX::Min->new('/path/to/file.tbx');
     my $entries = $min->entries;
-    my $entry = TBX::Min::Entry->new({id => 'B001'});
+    my $entry = TBX::Min::TermEntry->new({id => 'B001'});
     $min->add_entry($entry);
 
 =head1 DESCRIPTION
@@ -36,7 +36,7 @@ sub import {
 This module allows you to read, write and edit the contents of TBX-Min
 data.
 
-C<use>ing this module also automatically C<use>s L<TBX::Min::Entry>,
+C<use>ing this module also automatically C<use>s L<TBX::Min::TermEntry>,
 L<TBX::Min::LangGroup>, and L<TBX::Min::TermGroup> via
 L<Import::Into>. LangGroups contain TermGroups, Entries contain
 LangGroups, and this class contains Entries. These correspond to the
@@ -108,7 +108,7 @@ sub new_from_xml {
             directionality => \&_directionality,
             languages => \&_languages,
 
-            # becomes part of the current TBX::Min::Entry object
+            # becomes part of the current TBX::Min::TermEntry object
             subjectField => sub {
                 shift->{tbx_min_entries}->[-1]->subject_field($_->text)},
 
@@ -150,7 +150,7 @@ a hash reference which is used to initialize the object. The allowed hash
 fields are C<id>, C<description>, C<date_created>, C<creator>, C<license>,
 C<directionality>, C<source_lang> and C<target_lang>, which correspond to
 methods of the same name, and C<entries>, which should be an array reference
-containing C<TBX::Min::Entry> objects. This method croaks if
+containing C<TBX::Min::TermEntry> objects. This method croaks if
 C<date_created> is not in ISO 8601 format.
 
 =cut
@@ -310,7 +310,7 @@ sub target_lang {
 
 =head2 C<entries>
 
-Returns an array ref containing the C<TBX::Min::Entry> objects contained
+Returns an array ref containing the C<TBX::Min::TermEntry> objects contained
 in the document.The array ref is the same one used to store the objects
 internally, so additions or removals from the array will be reflected in future
 calls to this method.
@@ -326,14 +326,14 @@ sub entries { ## no critic(RequireArgUnpacking)
 
 =head2 C<add_entry>
 
-Adds the input C<TBX::Min::Entry> object to the list of language groups
+Adds the input C<TBX::Min::TermEntry> object to the list of language groups
 contained by this object.
 
 =cut
 sub add_entry {
     my ($self, $entry) = @_;
-    if( !$entry || !$entry->isa('TBX::Min::Entry') ){
-        croak 'argument to add_entry should be a TBx::Min::Entry';
+    if( !$entry || !$entry->isa('TBX::Min::TermEntry') ){
+        croak 'argument to add_entry should be a TBx::Min::TermEntry';
     }
     push @{$self->{entries}}, $entry;
     return;
@@ -480,7 +480,7 @@ sub _languages{
 # add a new concept entry to the list of those found in this file
 sub _conceptStart {
     my ($twig, $node) = @_;
-    my $concept = TBX::Min::Entry->new();
+    my $concept = TBX::Min::TermEntry->new();
     if($node->att('id')){
         $concept->id($node->att('id'));
     }else{
@@ -538,7 +538,7 @@ The following related modules:
 
 =over
 
-=item L<TBX::Min::Entry>
+=item L<TBX::Min::TermEntry>
 
 =item L<TBX::Min::LangGroup>
 
