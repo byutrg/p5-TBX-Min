@@ -77,7 +77,7 @@ containing this data is required.
 =cut
 sub new_from_xml {
     my ($class, $data) = @_;
-
+	print $data;
     if(!$data){
         croak 'missing required data argument';
     }
