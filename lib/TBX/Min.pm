@@ -376,7 +376,7 @@ sub as_xml {
         my $entry_el = XML::Twig::Elt->new(
             termEntry => {$termEntry->id ? (id => $termEntry->id) : ()})->
             paste(last_child => $body);
-        $entry_el = XML::Twig::Elt->new( '#COMMENT', 'terminological entry')->
+        my $entry_el_comment = XML::Twig::Elt->new( '#COMMENT', 'terminological entry')->
             paste(last_child => $body);
         if(my $sf = $termEntry->subject_field){
             XML::Twig::Elt->new(subjectField => $sf)->paste(
@@ -386,7 +386,7 @@ sub as_xml {
             my $lang_el = XML::Twig::Elt->new(langSet =>
                 {$langGrp->code ? ('xml:lang' => $langGrp->code) : ()}
             )->paste(last_child => $entry_el);
-            for my $termGrp (@{$langGrp->term_groups}){
+            for my $termGrp (@{$langGrp->term_groups}){     
                 my $term_el = XML::Twig::Elt->new('tig')->paste(
                     last_child => $lang_el);
                 if (my $term = $termGrp->term){
