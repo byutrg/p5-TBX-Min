@@ -14,6 +14,8 @@ use Import::Into;
 use DateTime::Format::ISO8601;
 use Try::Tiny;
 
+our $VERSION = '0.07';
+
 # Use Import::Into to export subclasses into caller
 sub import {
     my $target = caller;
@@ -77,7 +79,7 @@ containing this data is required.
 =cut
 sub new_from_xml {
     my ($class, $data) = @_;
-	print $data;
+
     if(!$data){
         croak 'missing required data argument';
     }
@@ -377,7 +379,7 @@ sub as_xml {
             termEntry => {$termEntry->id ? (id => $termEntry->id) : ()})->
             paste(last_child => $body);
         my $entry_el_comment = XML::Twig::Elt->new( '#COMMENT', 'terminological entry')->
-            paste(last_child => $body);
+            paste(last_child => $entry_el);
         if(my $sf = $termEntry->subject_field){
             XML::Twig::Elt->new(subjectField => $sf)->paste(
                 last_child => $entry_el);
@@ -389,6 +391,8 @@ sub as_xml {
             for my $termGrp (@{$langGrp->term_groups}){     
                 my $term_el = XML::Twig::Elt->new('tig')->paste(
                     last_child => $lang_el);
+                my $term_el_comment = XML::Twig::Elt->new( '#COMMENT', 'terminological information group')->
+					paste(last_child => $term_el);
                 if (my $term = $termGrp->term){
                     XML::Twig::Elt->new(term => $term)->paste(
                         last_child => $term_el);
