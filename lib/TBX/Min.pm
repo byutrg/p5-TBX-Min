@@ -376,6 +376,8 @@ sub as_xml {
         my $entry_el = XML::Twig::Elt->new(
             termEntry => {$termEntry->id ? (id => $termEntry->id) : ()})->
             paste(last_child => $body);
+        $entry_el = XML::Twig::Elt->new( '#COMMENT', 'terminological entry')->
+            paste(last_child => $body);
         if(my $sf = $termEntry->subject_field){
             XML::Twig::Elt->new(subjectField => $sf)->paste(
                 last_child => $entry_el);
@@ -418,7 +420,9 @@ sub as_xml {
 
     # return pretty-printed string
     XML::Twig->set_pretty_print('indented');
-    return \$root->sprint;
+    my $TBXmin = \$root->sprint;
+	$$TBXmin =~ s/>[\s\t\n]*<!--/><!--/g;  #force comments to be on same line as their parent
+	return $TBXmin;
 }
 
 ######################
