@@ -39,6 +39,19 @@ Creates a new C<TBX::Min::TIG> instance. Optionally you may pass in a hash
 reference which is used to initialized the object. The fields of the hash
 correspond to the names of the accessor methods listed below.
 
+=cut
+sub new {
+    my ($class, $args) = @_;
+    my $self;
+    if((ref $args) eq 'HASH'){
+        $self = $args;
+    }else{
+        $self = {};
+    }
+    $self->{note_groups} ||= [];
+    return bless $self, $class;
+}
+
 =head2 C<term>
 
 Get or set the term text associated with this term group.
@@ -58,9 +71,36 @@ sub part_of_speech {
     return $self->{part_of_speech};
 }
 
-=head2 C<note>
+=head2 C<note_groups>
 
-Get or set a note associated with this term group.
+Returns an array ref containing all of the C<TBX::Min::NoteGrp> objects
+in this tig. The array ref is the same one used to store the objects
+internally, so additions or removals from the array will be reflected in future
+calls to this method.
+
+=cut
+sub note_groups { ## no critic(RequireArgUnpacking)
+    my ($self) = @_;
+    if (@_ > 1){
+        croak 'extra argument found (note_groups is a getter only)';
+    }
+    return $self->{note_groups};
+}
+
+=head2 C<add_note_group>
+
+Adds the input C<TBX::Min::NoteGrp> object to the list of language groups
+contained by this object.
+
+=cut
+sub add_note_group {
+    my ($self, $note_grp) = @_;
+    if( !$note_grp || !$note_grp->isa('TBX::Min::NoteGrp') ){
+        croak 'argument to add_term_group should be a TBX::Min::TIG';
+    }
+    push @{$self->{note_groups}}, $note_grp;
+    return;
+}
 
 =head2 C<customer>
 

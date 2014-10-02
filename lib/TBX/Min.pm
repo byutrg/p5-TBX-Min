@@ -10,6 +10,8 @@ use Carp;
 use TBX::Min::TermEntry;
 use TBX::Min::LangSet;
 use TBX::Min::TIG;
+use TBX::Min::NoteGrp;
+use TBX::Min::Note;
 use Import::Into;
 use DateTime::Format::ISO8601;
 use Try::Tiny;
@@ -22,6 +24,8 @@ sub import {
     TBX::Min::TermEntry->import::into($target);
     TBX::Min::LangSet->import::into($target);
     TBX::Min::TIG->import::into($target);
+    TBX::Min::NoteGrp->import::into($target);
+    TBX::Min::Note->import::into($target);
     return;
 }
 
@@ -97,6 +101,8 @@ sub new_from_xml {
             termEntry => \&_conceptStart,
             langSet => \&_langStart,	#langset
             tig => \&_termGrpStart, #tig
+            noteGrp => \&_noteGrpStart, #note group
+            note => \&_noteStart, #note
         },
 
         TwigHandlers    => {
@@ -118,11 +124,14 @@ sub new_from_xml {
             term => sub {shift->{tbx_min_current_term_grp}->term($_->text)},
             partOfSpeech => sub {
                 shift->{tbx_min_current_term_grp}->part_of_speech($_->text)},
-            note => sub {shift->{tbx_min_current_term_grp}->note($_->text)},
             customer => sub {
                 shift->{tbx_min_current_term_grp}->customer($_->text)},
             termStatus => sub {
                 shift->{tbx_min_current_term_grp}->status($_->text)},
+                
+            # these become attributes of the current TBX::Min::Note object
+			noteKey => sub {shift->{tbx_min_current_note}->noteKey($_->text)},
+			noteValue => sub {shift->{tbx_min_current_note}->noteValue($_->text)}
         }
     );
 
@@ -403,9 +412,25 @@ sub as_xml {
                         last_child => $term_el);
                 }
 
-                if (my $note = $termGrp->note){
-                    XML::Twig::Elt->new(note => $note)->paste(
-                        last_child => $term_el);
+				for my $noteGrp (@{$termGrp->note_groups}){
+					my $note_grp_el = XML::Twig::Elt->new('noteGrp')->paste(
+                    last_child => $term_el);
+				
+					for my $note (@{$noteGrp->notes}){
+						my $note_el = XML::Twig::Elt->new('note')->paste(
+                    last_child => $note_grp_el);
+						
+						if (my $noteKey = $note->noteKey){
+							XML::Twig::Elt->new(noteKey => $noteKey)->paste(
+								last_child => $note_el);
+						}
+						
+						if (my $noteValue = $note->noteValue){
+							XML::Twig::Elt->new(noteValue => $noteValue)->paste(
+								last_child => $note_el);
+						}
+						
+					}
                 }
 
                 if (my $status = $termGrp->status){
@@ -532,6 +557,24 @@ sub _termGrpStart {
     return 1;
 }
 
+# Create a new noteGrp, add it to the current tig,
+# and set it as the curren noteGrp.
+sub _noteGrpStart {
+	my ($twig) = @_;
+	my $note_grp = TBX::Min::NoteGrp->new();
+	$twig->{tbx_min_current_term_grp}->add_note_group($note_grp);
+	$twig->{tbx_min_current_note_grp} = $note_grp;
+	return 1;
+}
+
+sub _noteStart {
+    my ($twig) = @_;
+    my $note = TBX::Min::Note->new();
+    $twig->{tbx_min_current_note_grp}->add_note($note);
+    $twig->{tbx_min_current_note} = $note;
+    return 1;
+}
+
 1;
 
 =head1 CAVEATS
@@ -551,6 +594,10 @@ The following related modules:
 =item L<TBX::Min::LangSet>
 
 =item L<TBX::Min::TIG>
+
+=item L<TBX::Min::NoteGrp>
+
+=item L<TBX::Min::Note>
 
 =item L<Convert::TBX::Min>
 
