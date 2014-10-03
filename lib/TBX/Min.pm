@@ -141,7 +141,10 @@ sub new_from_xml {
 
             # these become attributes of the current TBX::Min::Note object
 			noteKey => sub {shift->{tbx_min_current_note}->noteKey($_->text)},
-			noteValue => sub {shift->{tbx_min_current_note}->noteValue($_->text)}
+			noteValue => sub {shift->{tbx_min_current_note}->noteValue($_->text)},
+
+            # delete the termEntry twig when finished to free up memory
+            termEntry => sub {$_[0]->purge},
         }
     );
 
