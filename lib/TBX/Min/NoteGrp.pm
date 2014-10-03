@@ -34,8 +34,16 @@ correspond to the names of the accessor methods listed below.
 =cut
 sub new {
     my ($class, $args) = @_;
+
     my $self;
     if((ref $args) eq 'HASH'){
+        # only 'notes' allowed in input hash
+        my @invalids = grep {$_ ne 'notes'} sort keys %$args;
+        croak 'Invalid attributes for class: ' . join ' ', @invalids
+            if @invalids;
+        if($args->{notes} && ref $args->{notes} ne 'ARRAY'){
+            croak q{Attribute 'notes' should be an array reference};
+        }
         $self = $args;
     }else{
         $self = {};
