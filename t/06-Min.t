@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 33;
+plan tests => 34;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Deep;
@@ -115,4 +115,18 @@ subtest 'foo is not a legal directionality value' => sub {
         $min = TBX::Min->new();
         $min->directionality('foo');
     } $error, 'accessor';
+};
+
+subtest 'TBX::Min imports constituent modules' => sub {
+    plan tests => 5;
+    ok(scalar keys %TBX::Min::Note::,
+    'TBX::Min::Note');
+    ok(scalar keys %TBX::Min::NoteGrp::,
+        'TBX::Min::NoteGrp');
+    ok(scalar keys %TBX::Min::TIG::,
+        'TBX::Min::TIG');
+    ok(scalar keys %TBX::Min::LangSet::,
+        'TBX::Min::LangSet');
+    ok(scalar keys %TBX::Min::TermEntry::,
+        'TBX::Min::TermEntry');
 };
