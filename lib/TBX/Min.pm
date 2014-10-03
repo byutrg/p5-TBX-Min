@@ -3,18 +3,30 @@ use strict;
 use warnings;
 # VERSION
 # ABSTRACT: Read, write and edit TBX-Min files
+use subs qw(date_created directionality entries);
+use Class::Tiny qw(
+    id
+    description
+    creator
+    license
+    source_lang
+    target_lang
+    date_created
+    directionality
+    entries
+);
 use XML::Twig;
 use autodie;
 use Path::Tiny;
 use Carp;
+use Import::Into;
+use DateTime::Format::ISO8601;
+use Try::Tiny;
 use TBX::Min::TermEntry;
 use TBX::Min::LangSet;
 use TBX::Min::TIG;
 use TBX::Min::NoteGrp;
 use TBX::Min::Note;
-use Import::Into;
-use DateTime::Format::ISO8601;
-use Try::Tiny;
 
 # Use Import::Into to export subclasses into caller
 sub import {
@@ -164,17 +176,7 @@ C<date_created> is not in ISO 8601 format.
 
 =cut
 
-my %valid = map +($_=>1), qw(
-    id
-    description
-    creator
-    license
-    source_lang
-    target_lang
-    date_created
-    directionality
-    entries
-);
+my %valid = map +($_=>1), Class::Tiny->get_all_attributes_for(__PACKAGE__);
 sub new {
     my ($class, $args) = @_;
     my $self;
@@ -192,7 +194,7 @@ sub new {
             _validate_dir($args->{directionality});
         }
 
-        #don't store a plain string for datetime
+        # validate datetime and store object, not string
         if(my $dt_string = $args->{date_created}){
             $args->{date_created} = _parse_datetime($dt_string);
         }
@@ -210,27 +212,9 @@ sub new {
 Get or set the document id. This should be a unique string
 identifying this glossary.
 
-=cut
-sub id {
-    my ($self, $id) = @_;
-    if($id) {
-        return $self->{id} = $id;
-    }
-    return $self->{id};
-}
-
 =head2 C<description>
 
 Get or set the document description.
-
-=cut
-sub description {
-    my ($self, $description) = @_;
-    if($description) {
-        return $self->{description} = $description;
-    }
-    return $self->{description};
-}
 
 =head2 C<date_created>
 
@@ -266,27 +250,9 @@ sub _parse_datetime {
 
 Get or set the name of the document creator.
 
-=cut
-sub creator {
-    my ($self, $creator) = @_;
-    if($creator) {
-        return $self->{creator} = $creator;
-    }
-    return $self->{creator};
-}
-
 =head2 C<license>
 
 Get or set the document license string.
-
-=cut
-sub license {
-    my ($self, $license) = @_;
-    if($license) {
-        return $self->{license} = $license;
-    }
-    return $self->{license};
-}
 
 =head2 C<directionality>
 
@@ -311,34 +277,15 @@ sub _validate_dir {
     return;
 }
 
-
 =head2 C<source_lang>
 
 Get or set the code representing the document source language. This should
 be ISO 639 and 3166 (e.g. C<en-US>, C<de>, etc.).
 
-=cut
-sub source_lang {
-    my ($self, $source_lang) = @_;
-    if($source_lang) {
-        return $self->{source_lang} = $source_lang;
-    }
-    return $self->{source_lang};
-}
-
 =head2 C<target_lang>
 
 Get or set the code representing the document target language. This should
 be ISO 639 and 3166 (e.g. C<en-US>, C<de>, etc.).
-
-=cut
-sub target_lang {
-    my ($self, $target_lang) = @_;
-    if($target_lang) {
-        return $self->{target_lang} = $target_lang;
-    }
-    return $self->{target_lang};
-}
 
 =head2 C<entries>
 
