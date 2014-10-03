@@ -17,8 +17,8 @@ my $args = {
         TBX::Min::NoteGrp->new({
             notes => [
                 TBX::Min::Note->new({
-                    key => 'foo',
-                    value => 'bar'
+                    noteKey => 'foo',
+                    noteValue => 'bar'
             })]
     })],
     customer => 'foo4',
