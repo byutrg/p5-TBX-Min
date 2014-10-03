@@ -118,8 +118,20 @@ L<TBX::Min>
 
 =cut
 # above Pod::Coverage makes this not "naked" via Pod::Coverage::TrustPod
+
+my %valid = map +($_=>1), Class::Tiny->get_all_attributes_for(__PACKAGE__);
 sub BUILD {
     my ($self, $args) = @_;
+
+    # validate arguments
+    if(my @invalids = grep !$valid{$_}, sort keys %$args){
+        croak 'Invalid attributes for class: ' .
+            join ' ', @invalids
+    }
+    if($args->{note_groups} && ref $args->{note_groups} ne 'ARRAY'){
+        croak q{Attribute 'note_groups' should be an array reference};
+    }
+
     if($args->{part_of_speech}){
         _validate_pos($args->{part_of_speech});
     }

@@ -163,17 +163,40 @@ containing C<TBX::Min::TermEntry> objects. This method croaks if
 C<date_created> is not in ISO 8601 format.
 
 =cut
+
+my %valid = map +($_=>1), qw(
+    id
+    description
+    creator
+    license
+    source_lang
+    target_lang
+    date_created
+    directionality
+    entries
+);
 sub new {
     my ($class, $args) = @_;
     my $self;
     if((ref $args) eq 'HASH'){
-        #don't store a plain string for datetime
-        if(my $dt_string = $args->{date_created}){
-            $args->{date_created} = _parse_datetime($dt_string);
+
+        # validate arguments
+        if(my @invalids = grep !$valid{$_}, sort keys %$args){
+            croak 'Invalid attributes for class: ' .
+                join ' ', @invalids
+        }
+        if($args->{entries} && ref $args->{entries} ne 'ARRAY'){
+            croak q{Attribute 'entries' should be an array reference};
         }
         if(exists $args->{directionality}){
             _validate_dir($args->{directionality});
         }
+
+        #don't store a plain string for datetime
+        if(my $dt_string = $args->{date_created}){
+            $args->{date_created} = _parse_datetime($dt_string);
+        }
+
         $self = $args;
     }else{
         $self = {};

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 29;
+plan tests =>31;
 use Test::NoWarnings;
 use Test::Exception;
 use TBX::Min;
@@ -112,3 +112,13 @@ subtest 'foo is not a legal status value' => sub {
         $term_grp->status('foo');
     } $error, 'accessor';
 };
+
+throws_ok {
+    TBX::Min::TIG->new({foo=>'bar'});
+} qr{Invalid attributes for class: foo},
+'constructor fails with bad arguments';
+
+throws_ok {
+    TBX::Min::TIG->new({note_groups => 'bar'});
+} qr{Attribute 'note_groups' should be an array reference},
+'constructor fails with incorrect data type for note_groups';

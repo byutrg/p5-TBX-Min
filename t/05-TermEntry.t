@@ -3,9 +3,10 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 11;
+plan tests => 13;
 use Test::Deep;
 use Test::NoWarnings;
+use Test::Exception;
 use TBX::Min;
 
 my $args = {
@@ -48,3 +49,13 @@ is($concept->subject_field, $args->{subject_field},
 $concept->add_lang_group($args->{lang_groups}->[0]);
 cmp_deeply($concept->lang_groups->[0], $args->{lang_groups}->[0],
     'add_lang_group works correctly');
+
+throws_ok {
+    TBX::Min::TermEntry->new({foo=>'bar'});
+} qr{Invalid attributes for class: foo},
+'constructor fails with bad arguments';
+
+throws_ok {
+    TBX::Min::TermEntry->new({lang_groups => 'bar'});
+} qr{Attribute 'lang_groups' should be an array reference},
+'constructor fails with incorrect data type for lang_groups';

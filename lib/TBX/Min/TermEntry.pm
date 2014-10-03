@@ -36,10 +36,19 @@ C<subject_field> correspond to methods of the same name, and C<langSets> is
 an array reference containing C<TBX::Min::LangSet> objects.
 
 =cut
+my %valid = map +($_=>1), qw(id subject_field lang_groups);
 sub new {
     my ($class, $args) = @_;
     my $self;
     if((ref $args) eq 'HASH'){
+        # validate arguments
+        if(my @invalids = grep !$valid{$_}, sort keys %$args){
+            croak 'Invalid attributes for class: ' .
+                join ' ', @invalids
+        }
+        if($args->{lang_groups} && ref $args->{lang_groups} ne 'ARRAY'){
+            croak q{Attribute 'lang_groups' should be an array reference};
+        }
         $self = $args;
     }else{
         $self = {};

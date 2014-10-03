@@ -46,4 +46,4 @@ throws_ok {
 throws_ok {
     TBX::Min::NoteGrp->new({notes=>'bar'});
 } qr{Attribute 'notes' should be an array reference},
-'constructor fails with bad incorrect data type for notes';
+'constructor fails with incorrect data type for notes';

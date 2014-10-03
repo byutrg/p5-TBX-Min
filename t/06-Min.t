@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More;
-plan tests => 34;
+plan tests => 36;
 use Test::NoWarnings;
 use Test::Exception;
 use Test::Deep;
@@ -130,3 +130,13 @@ subtest 'TBX::Min imports constituent modules' => sub {
     ok(scalar keys %TBX::Min::TermEntry::,
         'TBX::Min::TermEntry');
 };
+
+throws_ok {
+    TBX::Min->new({foo=>'bar'});
+} qr{Invalid attributes for class: foo},
+'constructor fails with bad arguments';
+
+throws_ok {
+    TBX::Min->new({entries => 'bar'});
+} qr{Attribute 'entries' should be an array reference},
+'constructor fails with incorrect data type for entries';

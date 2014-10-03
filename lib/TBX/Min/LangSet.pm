@@ -36,10 +36,19 @@ method of the same name, and C<term_groups> is an array reference containing
 C<TBX::Min::LangSet> objects.
 
 =cut
+my %valid = map {$_ => 1} qw(code term_groups);
 sub new {
     my ($class, $args) = @_;
     my $self;
     if((ref $args) eq 'HASH'){
+        # validate arguments
+        if(my @invalids = grep {!$valid{$_}} sort keys %$args){
+            croak 'Invalid attributes for class: ' .
+                join ' ', @invalids
+        }
+        if($args->{term_groups} && ref $args->{term_groups} ne 'ARRAY'){
+            croak q{Attribute 'term_groups' should be an array reference};
+        }
         $self = $args;
     }else{
         $self = {};
