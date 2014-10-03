@@ -1,13 +1,13 @@
 package TBX::Min::TIG;
 use strict;
 use warnings;
-use subs qw(part_of_speech status);
+use subs qw(part_of_speech status note_groups);
 use Class::Tiny qw(
     term
     part_of_speech
-    note
     customer
     status
+    note_groups
 );
 use Carp;
 
@@ -40,17 +40,6 @@ reference which is used to initialized the object. The fields of the hash
 correspond to the names of the accessor methods listed below.
 
 =cut
-sub new {
-    my ($class, $args) = @_;
-    my $self;
-    if((ref $args) eq 'HASH'){
-        $self = $args;
-    }else{
-        $self = {};
-    }
-    $self->{note_groups} ||= [];
-    return bless $self, $class;
-}
 
 =head2 C<term>
 
@@ -137,6 +126,7 @@ sub BUILD {
     if($args->{status}){
         _validate_status($args->{status});
     }
+    $self->{note_groups} ||= [];
     return;
 }
 

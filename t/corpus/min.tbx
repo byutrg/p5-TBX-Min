@@ -29,7 +29,12 @@
                     <termStatus>obsolete</termStatus>
                     <partOfSpeech>noun</partOfSpeech>
                     <customer>SAP</customer>
-                    <note>however bloodhound is used rather than blooddog</note>
+                    <noteGrp>
+                        <note>
+                            <noteKey>usage</noteKey>
+                            <noteValue>however bloodhound is used rather than blooddog</noteValue>
+                        </note>
+                    </noteGrp>
                 </tig>
             </langSet>
         </termEntry>

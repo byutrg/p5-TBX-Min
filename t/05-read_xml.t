@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More 0.88;
-plan tests => 45;
+plan tests => 47;
 use Test::NoWarnings;
 use TBX::Min;
 use FindBin qw($Bin);
@@ -68,8 +68,10 @@ sub test_body {
     is($term->part_of_speech, 'noun', 'correct part of speech');
     is($term->status, 'obsolete', 'correct status');
     is($term->customer, 'SAP', 'correct customer');
-    is($term->note, 'however bloodhound is used rather than blooddog',
-        'correct note');
+    my $note = $term->note_groups->[0]->notes->[0];
+    is($note->noteKey, 'usage', 'correct note key');
+    is($note->noteValue, 'however bloodhound is used rather than blooddog',
+        'correct note value');
 }
 
 # simple check that "entries" sub returns empty array, not undef
