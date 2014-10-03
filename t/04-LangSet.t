@@ -7,8 +7,6 @@ plan tests => 8;
 use Test::Deep;
 use Test::NoWarnings;
 use TBX::Min;
-use FindBin qw($Bin);
-use Path::Tiny;
 
 my $args = {
     code => 'en',

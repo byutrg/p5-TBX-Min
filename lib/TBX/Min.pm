@@ -16,8 +16,6 @@ use Import::Into;
 use DateTime::Format::ISO8601;
 use Try::Tiny;
 
-#our $VERSION = '0.07';
-
 # Use Import::Into to export subclasses into caller
 sub import {
     my $target = caller;
@@ -128,7 +126,7 @@ sub new_from_xml {
                 shift->{tbx_min_current_term_grp}->customer($_->text)},
             termStatus => sub {
                 shift->{tbx_min_current_term_grp}->status($_->text)},
-                
+
             # these become attributes of the current TBX::Min::Note object
 			noteKey => sub {shift->{tbx_min_current_note}->noteKey($_->text)},
 			noteValue => sub {shift->{tbx_min_current_note}->noteValue($_->text)}
@@ -397,7 +395,7 @@ sub as_xml {
             my $lang_el = XML::Twig::Elt->new(langSet =>
                 {$langGrp->code ? ('xml:lang' => $langGrp->code) : ()}
             )->paste(last_child => $entry_el);
-            for my $termGrp (@{$langGrp->term_groups}){     
+            for my $termGrp (@{$langGrp->term_groups}){
                 my $term_el = XML::Twig::Elt->new('tig')->paste(
                     last_child => $lang_el);
                 my $term_el_comment = XML::Twig::Elt->new( '#COMMENT', 'terminological information group')->
@@ -415,21 +413,21 @@ sub as_xml {
 				for my $noteGrp (@{$termGrp->note_groups}){
 					my $note_grp_el = XML::Twig::Elt->new('noteGrp')->paste(
                     last_child => $term_el);
-				
+
 					for my $note (@{$noteGrp->notes}){
 						my $note_el = XML::Twig::Elt->new('note')->paste(
                     last_child => $note_grp_el);
-						
+
 						if (my $noteKey = $note->noteKey){
 							XML::Twig::Elt->new(noteKey => $noteKey)->paste(
 								last_child => $note_el);
 						}
-						
+
 						if (my $noteValue = $note->noteValue){
 							XML::Twig::Elt->new(noteValue => $noteValue)->paste(
 								last_child => $note_el);
 						}
-						
+
 					}
                 }
 

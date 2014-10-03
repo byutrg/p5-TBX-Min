@@ -7,8 +7,6 @@ plan tests => 11;
 use Test::Deep;
 use Test::NoWarnings;
 use TBX::Min;
-use FindBin qw($Bin);
-use Path::Tiny;
 
 my $args = {
     id => 'B001',
