@@ -108,7 +108,7 @@ sub new_from_xml {
 
         # these store new entries, langSets and tigs
         start_tag_handlers => {
-            termEntry => \&_conceptStart,
+            termEntry => \&_termEntryStart,
             langSet => \&_langStart,	#langset
             tig => \&_termGrpStart, #tig
             noteGrp => \&_noteGrpStart, #note group
@@ -481,20 +481,20 @@ sub _languages{
     return 1;
 }
 
-# add a new concept termEntry to the list of those found in this file
-sub _conceptStart {
+# add a new termEntry to the list of those found in this file
+sub _termEntryStart {
     my ($twig, $node) = @_;
-    my $concept = TBX::Min::TermEntry->new();
+    my $entry = TBX::Min::TermEntry->new();
     if($node->att('id')){
-        $concept->id($node->att('id'));
+        $entry->id($node->att('id'));
     }else{
         carp 'found termEntry missing id attribute';
     }
-    push @{ $twig->{tbx_min_entries} }, $concept;
+    push @{ $twig->{tbx_min_entries} }, $entry;
     return 1;
 }
 
-#just set the subject_field of the current concept
+#just set the subject_field of the current termEntry
 sub _subjectField {
     my ($twig, $node) = @_;
     $twig->{tbx_min_entries}->[-1]->
@@ -502,7 +502,7 @@ sub _subjectField {
     return 1;
 }
 
-# Create a new langSet, add it to the current concept,
+# Create a new langSet, add it to the current termEntry,
 # and set it as the current langSet.
 sub _langStart {
     my ($twig, $node) = @_;
