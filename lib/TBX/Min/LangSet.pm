@@ -87,7 +87,7 @@ contained by this object.
 sub add_term_group {
     my ($self, $term_grp) = @_;
     if( !$term_grp || !$term_grp->isa('TBX::Min::TIG') ){
-        croak 'argument to add_term_group should be a TBx::Min::TIG';
+        croak 'argument to add_term_group should be a TBX::Min::TIG';
     }
     push @{$self->{term_groups}}, $term_grp;
     return;
