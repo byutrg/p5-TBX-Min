@@ -16,7 +16,7 @@ use Import::Into;
 use DateTime::Format::ISO8601;
 use Try::Tiny;
 
-our $VERSION = '0.07';
+#our $VERSION = '0.07';
 
 # Use Import::Into to export subclasses into caller
 sub import {
