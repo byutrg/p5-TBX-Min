@@ -1,7 +1,7 @@
 Revision history for TBX-Min
 
 {{$NEXT}}
-
+0.07	Many changes made to bring TBX::Min in line with current TBX-Min schema
 0.06      2014-02-03 13:01:04 America/Los_Angeles
     check input document for use of incorrect dialect
     import TBX::Min::Entry, etc. automatically
