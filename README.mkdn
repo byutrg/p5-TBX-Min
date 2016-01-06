@@ -4,7 +4,7 @@ TBX::Min - Read, write and edit TBX-Min files
 
 # VERSION
 
-version 0.06
+version 0.07
 
 # SYNOPSIS
 
@@ -19,13 +19,13 @@ version 0.06
 This module allows you to read, write and edit the contents of TBX-Min
 data.
 
-`use`ing this module also automatically `use`s [TBX::Min::TermEntry](http://search.cpan.org/perldoc?TBX::Min::TermEntry),
-[TBX::Min::LangSet](http://search.cpan.org/perldoc?TBX::Min::LangSet), and [TBX::Min::TIG](http://search.cpan.org/perldoc?TBX::Min::TIG) via
-[Import::Into](http://search.cpan.org/perldoc?Import::Into). LangSets contain TIGs(Term Information Groups), TermEntries contain
-LangSets, and this class contains TermEntries. These correspond to the
+`use`ing this module also automatically `use`s [TBX::Min::TermEntry](https://metacpan.org/pod/TBX::Min::TermEntry),
+[TBX::Min::LangSet](https://metacpan.org/pod/TBX::Min::LangSet), and [TBX::Min::TIG](https://metacpan.org/pod/TBX::Min::TIG) via
+[Import::Into](https://metacpan.org/pod/Import::Into). LangSets contain TIGs(Term Information Groups), termEntries contain
+LangSets, and this class contains termEntries. These correspond to the
 three levels of information found in TML. You can build up TBX::Min
-documents this way and then print them via ["as\_xml"](#as\_xml). You can also
-read an entire TBX-Min XML document for editing via ["new\_from\_xml"](#new\_from\_xml).
+documents this way and then print them via ["as\_xml"](#as_xml). You can also
+read an entire TBX-Min XML document for editing via ["new\_from\_xml"](#new_from_xml).
 
 # TBX-Min
 
@@ -45,9 +45,9 @@ documents cannot be checked by the
 
 If you need more complex or information-rich termbases, we suggest
 you use TBX-Basic or even TBX-Default. If you have a TBX-Min document
-and would like to upgrade it to TBX-Basic, see [Convert::TBX::Min](http://search.cpan.org/perldoc?Convert::TBX::Min).
+and would like to upgrade it to TBX-Basic, see [Convert::TBX::Min](https://metacpan.org/pod/Convert::TBX::Min).
 Alternatively if you would like to change your TBX-Basic to TBX-Min,
-see [Convert::TBX::Basic](http://search.cpan.org/perldoc?Convert::TBX::Basic).
+see [Convert::TBX::Basic](https://metacpan.org/pod/Convert::TBX::Basic).
 
 # METHODS
 
@@ -125,29 +125,31 @@ TBX-Min document. The data is a UTF-8 encoded string.
 # CAVEATS
 
 TBX::Min does not as of yet fully validate TBX-Min documents. It is
-possible to create non-validating XML via the [as\_xml](http://search.cpan.org/perldoc?as\_xml) method.
+possible to create non-validating XML via the [as\_xml](https://metacpan.org/pod/as_xml) method.
 This should be fixed in the future.
 
 # SEE ALSO
 
 The following related modules:
 
-- [TBX::Min::TermEntry](http://search.cpan.org/perldoc?TBX::Min::TermEntry)
-- [TBX::Min::LangSet](http://search.cpan.org/perldoc?TBX::Min::LangSet)
-- [TBX::Min::TIG](http://search.cpan.org/perldoc?TBX::Min::TIG)
-- [Convert::TBX::Min](http://search.cpan.org/perldoc?Convert::TBX::Min)
-- [Convert::TBX::Basic](http://search.cpan.org/perldoc?Convert::TBX::Basic)
+- [TBX::Min::TermEntry](https://metacpan.org/pod/TBX::Min::TermEntry)
+- [TBX::Min::LangSet](https://metacpan.org/pod/TBX::Min::LangSet)
+- [TBX::Min::TIG](https://metacpan.org/pod/TBX::Min::TIG)
+- [TBX::Min::NoteGrp](https://metacpan.org/pod/TBX::Min::NoteGrp)
+- [TBX::Min::Note](https://metacpan.org/pod/TBX::Min::Note)
+- [Convert::TBX::Min](https://metacpan.org/pod/Convert::TBX::Min)
+- [Convert::TBX::Basic](https://metacpan.org/pod/Convert::TBX::Basic)
 
 Schema for valiating TBX-Min files are available on
 [GitHub](https://github.com/byutrg/TBX-Spec).
 
 # AUTHOR
 
-Nathan Glenn <garfieldnate@gmail.com>
+James Hayes &lt;james.s.hayes@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Alan Melby.
+This software is copyright (c) 2016 by Alan Melby.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
